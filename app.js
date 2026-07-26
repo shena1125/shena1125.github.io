@@ -10,6 +10,10 @@ async function loadSongs() {
       const card = document.createElement('div');
       card.className = 'song-card';
 
+      // dataset に読み情報を追加
+      card.dataset.song_title_reading = song.song_title_reading || "";
+      card.dataset.artist_reading = song.artist_reading || "";
+
       card.innerHTML = `
         <div class="song-title">${song.song_title}</div>
         <div class="artist">${song.artist}</div>
@@ -37,30 +41,10 @@ document.getElementById('search').addEventListener('input', e => {
     const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
     const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
 
-    // JSONデータから読みも含めて検索できるようにする
-    const songData = card.dataset; // dataset に読み情報を持たせる
-    const titleReading = songData.song_title_reading?.toLowerCase() || "";
-    const artistReading = songData.artist_reading?.toLowerCase() || "";
+    const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
+    const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
 
     const text = `${title} ${artist} ${titleReading} ${artistReading}`;
     card.style.display = text.includes(keyword) ? 'block' : 'none';
   });
-});
-
-songs.forEach(song => {
-  const card = document.createElement('div');
-  card.className = 'song-card';
-
-  // dataset に読み情報を追加
-  card.dataset.song_title_reading = song.song_title_reading || "";
-  card.dataset.artist_reading = song.artist_reading || "";
-
-  card.innerHTML = `
-    <div class="song-title">${song.song_title}</div>
-    <div class="artist">${song.artist}</div>
-    <div>初披露：${song.first ? "✔" : "－"}</div>
-    <a class="live-link" href="${song.live_url}" target="_blank">配信を見る</a>
-  `;
-
-  list.appendChild(card);
 });
