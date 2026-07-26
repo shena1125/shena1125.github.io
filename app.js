@@ -29,3 +29,10 @@ async function loadSongs() {
 }
 
 loadSongs();
+document.getElementById('search').addEventListener('input', e => {
+  const keyword = e.target.value.toLowerCase();
+  document.querySelectorAll('.song-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(keyword) ? 'block' : 'none';
+  });
+});
