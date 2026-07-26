@@ -10,7 +10,7 @@ async function loadSongs() {
       const card = document.createElement('div');
       card.className = 'song-card';
 
-      // dataset に読み情報を追加
+      // dataset に読み情報を追加（ここが重要！）
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
