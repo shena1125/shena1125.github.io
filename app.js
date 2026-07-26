@@ -29,10 +29,21 @@ async function loadSongs() {
 }
 
 loadSongs();
+
 document.getElementById('search').addEventListener('input', e => {
   const keyword = e.target.value.toLowerCase();
+
   document.querySelectorAll('.song-card').forEach(card => {
-    const text = card.textContent.toLowerCase();
+    const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
+    const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
+
+    // JSONデータから読みも含めて検索できるようにする
+    const songData = card.dataset; // dataset に読み情報を持たせる
+    const titleReading = songData.song_title_reading?.toLowerCase() || "";
+    const artistReading = songData.artist_reading?.toLowerCase() || "";
+
+    const text = `${title} ${artist} ${titleReading} ${artistReading}`;
     card.style.display = text.includes(keyword) ? 'block' : 'none';
   });
 });
+
