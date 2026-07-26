@@ -47,3 +47,20 @@ document.getElementById('search').addEventListener('input', e => {
   });
 });
 
+songs.forEach(song => {
+  const card = document.createElement('div');
+  card.className = 'song-card';
+
+  // dataset に読み情報を追加
+  card.dataset.song_title_reading = song.song_title_reading || "";
+  card.dataset.artist_reading = song.artist_reading || "";
+
+  card.innerHTML = `
+    <div class="song-title">${song.song_title}</div>
+    <div class="artist">${song.artist}</div>
+    <div>初披露：${song.first ? "✔" : "－"}</div>
+    <a class="live-link" href="${song.live_url}" target="_blank">配信を見る</a>
+  `;
+
+  list.appendChild(card);
+});
