@@ -10,7 +10,7 @@ async function loadSongs() {
       const card = document.createElement('div');
       card.className = 'song-card';
 
-      // dataset に読み情報を追加（ここが重要！）
+      // dataset に読み情報を追加
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
@@ -24,27 +24,33 @@ async function loadSongs() {
       list.appendChild(card);
     });
 
+    // 「読み込み中...」を消す
+    const resultDiv = document.getElementById('result');
+    if (resultDiv) resultDiv.remove();
+
     document.body.appendChild(list);
 
+    // 検索イベントをここで登録（確実に要素が存在するタイミング）
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+      searchInput.addEventListener('input', e => {
+        const keyword = e.target.value.toLowerCase();
+
+        document.querySelectorAll('.song-card').forEach(card => {
+          const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
+          const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
+          const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
+          const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
+
+          const text = `${title} ${artist} ${titleReading} ${artistReading}`;
+          card.style.display = text.includes(keyword) ? 'block' : 'none';
+        });
+      });
+    }
+
   } catch (e) {
-    document.getElementById('result').textContent =
-      '読み込み失敗：' + e;
+    console.error('読み込み失敗：', e);
   }
 }
 
 loadSongs();
-
-document.getElementById('search').addEventListener('input', e => {
-  const keyword = e.target.value.toLowerCase();
-
-  document.querySelectorAll('.song-card').forEach(card => {
-    const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
-    const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
-
-    const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
-    const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
-
-    const text = `${title} ${artist} ${titleReading} ${artistReading}`;
-    card.style.display = text.includes(keyword) ? 'block' : 'none';
-  });
-});
