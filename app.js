@@ -18,7 +18,7 @@ async function loadSongs() {
         <div class="song-title">${song.song_title}</div>
         <div class="artist">${song.artist}</div>
         <div>初披露：${song.first ? "✔" : "－"}</div>
-        <a class="live-link" href="${song.live_url}&t=${song.start_seconds}s" target="_blank">配信を見る</a>
+        <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
       `;
 
       list.appendChild(card);
