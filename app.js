@@ -28,13 +28,22 @@ async function loadSongs() {
       const streamTypeLabel = typeMap[song.stream_type] || "その他";
 
       card.innerHTML = `
-        <div class="song-title">${song.song_title}</div>
-        <div class="artist">${song.artist}</div>
-        <div class="live-date">📅 ${song.live_date}</div>
-        ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
-        <div class="stream-type">🎤 ${streamTypeLabel}</div>
-        <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
-      `;
+  <div class="song-title">${song.song_title}</div>
+  <div class="artist">${song.artist}</div>
+
+  <div class="live-date">📅 ${song.live_date}</div>
+  <div class="live-title">📺 ${song.live_title}</div>
+
+  ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
+
+  <div class="stream-type">🔧 種別：${song.stream_type}</div>
+
+  ${song.anime_game ? `<div class="anime-game">🎬 ${song.anime_game}</div>` : ""}
+
+  <div class="full-flag">🎵 ${song.full ? "フル" : "ワンコーラス"}</div>
+
+  <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
+`;
 
       list.appendChild(card);
     });
