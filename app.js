@@ -30,7 +30,7 @@ async function loadSongs() {
 
     document.body.appendChild(list);
 
-    // 検索イベントをここで登録（確実に要素が存在するタイミング）
+    // 検索イベントをここで登録
     const searchInput = document.getElementById('search');
     if (searchInput) {
       searchInput.addEventListener('input', e => {
