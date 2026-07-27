@@ -14,18 +14,11 @@ async function loadSongs() {
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
-      card.innerHTML = `
-  <img class="thumbnail" src="${song.cover_image}" alt="${song.song_title}">
-
+card.innerHTML = `
   <div class="song-title">${song.song_title}</div>
-
   <div class="artist">${song.artist}</div>
-
   <div>初披露：${song.first ? "✔" : "－"}</div>
-
-  <a class="live-link" href="${song.youtube_link}" target="_blank">
-    配信を見る
-  </a>
+  <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
 `;
 
       list.appendChild(card);
