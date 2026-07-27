@@ -36,8 +36,7 @@ async function loadSongs() {
 
   ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
 
-  <div class="stream-type">🔧 種別：${song.stream_type}</div>
-
+  <div class="stream-type">🎤 ${streamTypeLabel}</div>
   ${song.anime_game ? `<div class="anime-game">🎬 ${song.anime_game}</div>` : ""}
 
   <div class="full-flag">🎵 ${song.full ? "フル" : "ワンコーラス"}</div>
