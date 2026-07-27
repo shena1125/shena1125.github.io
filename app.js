@@ -1,7 +1,11 @@
 async function loadSongs() {
   try {
+    console.log("app.js 開始");
+
     const res = await fetch('./songs.json');
     const songs = await res.json();
+
+    console.log(songs[0]);
 
     const list = document.createElement('div');
     list.id = 'song-list';
