@@ -1,11 +1,7 @@
 async function loadSongs() {
   try {
-    console.log("app.js 開始");
-
     const res = await fetch('./songs.json');
     const songs = await res.json();
-
-    console.log(songs[0]);
 
     const list = document.createElement('div');
     list.id = 'song-list';
@@ -36,7 +32,7 @@ async function loadSongs() {
         <div class="artist">${song.artist}</div>
         <div class="live-date">📅 ${song.live_date}</div>
         ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
-        <div class="stream-type">🎤 配信種別：${streamTypeLabel}</div>
+        <div class="stream-type">🎤 ${streamTypeLabel}</div>
         <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
       `;
 
@@ -73,4 +69,3 @@ async function loadSongs() {
 }
 
 loadSongs();
-
