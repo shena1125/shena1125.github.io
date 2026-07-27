@@ -6,16 +6,6 @@ async function loadSongs() {
     const list = document.createElement('div');
     list.id = 'song-list';
 
-    // 配信種別の日本語化マップ
-    const typeMap = {
-      karaoke: "歌枠",
-      live: "ライブ",
-      relay: "歌枠リレー",
-      collaboration: "コラボ",
-      event: "イベント",
-      others: "その他"
-    };
-
     songs.forEach(song => {
       const card = document.createElement('div');
       card.className = 'song-card';
@@ -24,12 +14,45 @@ async function loadSongs() {
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
-      // 配信種別（日本語化）
-      const streamTypeLabel = typeMap[song.stream_type] || "その他";
+card.innerHTML = `
+  <div class="song-title">${song.song_title}</div>
+  <div class="artist">${song.artist}</div>
+  <div class="live-date">📅 ${song.live_date}</div>
+  ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
+  <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
+`;
 
-      card.innerHTML = `
-        <div class="song-title">${song.song_title}</div>
-        <div class="artist">${song.artist}</div>
-        <div class="live-date">📅 ${song.live_date}</div>
-        ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
-        <div class="stream-type">🎤 配信種別：${stream
+
+      list.appendChild(card);
+    });
+
+    // 「読み込み中...」を消す
+    const resultDiv = document.getElementById('result');
+    if (resultDiv) resultDiv.remove();
+
+    document.body.appendChild(list);
+
+    // 検索イベントをここで登録（確実に要素が存在するタイミング）
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+      searchInput.addEventListener('input', e => {
+        const keyword = e.target.value.toLowerCase();
+
+        document.querySelectorAll('.song-card').forEach(card => {
+          const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
+          const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
+          const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
+          const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
+
+          const text = `${title} ${artist} ${titleReading} ${artistReading}`;
+          card.style.display = text.includes(keyword) ? 'block' : 'none';
+        });
+      });
+    }
+
+  } catch (e) {
+    console.error('読み込み失敗：', e);
+  }
+}
+
+loadSongs();
