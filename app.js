@@ -14,11 +14,14 @@ async function loadSongs() {
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
+      // URL の末尾にスペースがあっても安全にする
+      const cleanUrl = song.live_url.trim();
+
       card.innerHTML = `
         <div class="song-title">${song.song_title}</div>
         <div class="artist">${song.artist}</div>
         <div>初披露：${song.first ? "✔" : "－"}</div>
-        <a class="live-link" href="${song.live_url}?t=${song.start_seconds}" target="_blank">配信を見る</a>
+        <a class="live-link" href="${cleanUrl}?t=${song.start_seconds}" target="_blank">配信を見る</a>
       `;
 
       list.appendChild(card);
