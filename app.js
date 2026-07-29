@@ -18,7 +18,8 @@ async function loadSongs() {
 
     const filterDefinitions = [
       { id: 'filter-first', datasetKey: 'first' },
-      { id: 'filter-original', datasetKey: 'original_song' }
+      { id: 'filter-original', datasetKey: 'original_song' },
+      { id: 'filter-full', datasetKey: 'full' }
     ];
 
     songs.forEach(song => {
@@ -35,6 +36,8 @@ async function loadSongs() {
       card.dataset.work_name_reading = song.work_name_reading || "";
       card.dataset.first = song.first ? 'true' : 'false';
       card.dataset.original_song = song.original_song ? 'true' : 'false';
+      card.dataset.full = song.full ? 'true' : 'false';
+      card.dataset.stream_type = song.stream_type || "";
 
       // 配信種別（日本語化）
       const streamTypeLabel = typeMap[song.stream_type] || "その他";
@@ -70,6 +73,7 @@ async function loadSongs() {
     document.body.appendChild(list);
 
     const searchInput = document.getElementById('search');
+    const streamFilterSelect = document.getElementById('filter-stream-type');
 
     function matchesSearch(card, keyword) {
       if (!keyword) return true;
@@ -88,11 +92,16 @@ async function loadSongs() {
       return text.includes(keyword);
     }
 
-    function matchesFilters(card, activeFilters) {
+    function matchesCheckboxFilters(card, activeFilters) {
       return filterDefinitions.every(filter => {
         if (!activeFilters[filter.datasetKey]) return true;
         return card.dataset[filter.datasetKey] === 'true';
       });
+    }
+
+    function matchesStreamType(card, selectedStreamType) {
+      if (!selectedStreamType || selectedStreamType === 'all') return true;
+      return card.dataset.stream_type === selectedStreamType;
     }
 
     function applyDisplay() {
@@ -103,8 +112,14 @@ async function loadSongs() {
         return acc;
       }, {});
 
+      const selectedStreamType = streamFilterSelect?.value || 'all';
+
       document.querySelectorAll('.song-card').forEach(card => {
-        const visible = matchesSearch(card, keyword) && matchesFilters(card, activeFilters);
+        const visible =
+          matchesSearch(card, keyword) &&
+          matchesCheckboxFilters(card, activeFilters) &&
+          matchesStreamType(card, selectedStreamType);
+
         card.style.display = visible ? 'block' : 'none';
       });
     }
@@ -120,6 +135,10 @@ async function loadSongs() {
         checkbox.addEventListener('change', applyDisplay);
       }
     });
+
+    if (streamFilterSelect) {
+      streamFilterSelect.addEventListener('change', applyDisplay);
+    }
 
     applyDisplay();
 

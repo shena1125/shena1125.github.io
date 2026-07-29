@@ -9,9 +9,28 @@
 
   <input type="text" id="search" placeholder="曲名・アーティストで検索">
 
-  <div id="filter-controls">
-    <label><input type="checkbox" id="filter-first"> 初披露のみ</label>
-    <label><input type="checkbox" id="filter-original"> オリジナル曲のみ</label>
+  <div class="filter-area">
+    <div class="filter-section">
+      <div class="filter-title">フィルター</div>
+      <div class="filter-options">
+        <label><input type="checkbox" id="filter-first"> 初披露のみ</label>
+        <label><input type="checkbox" id="filter-original"> オリジナル曲のみ</label>
+        <label><input type="checkbox" id="filter-full"> フルのみ</label>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">配信種類</div>
+      <select id="filter-stream-type">
+        <option value="all">すべて</option>
+        <option value="karaoke">歌枠</option>
+        <option value="live">ライブ</option>
+        <option value="relay">歌枠リレー</option>
+        <option value="collaboration">コラボ</option>
+        <option value="event">イベント</option>
+        <option value="others">その他</option>
+      </select>
+    </div>
   </div>
 
   <h1>轟はじめ歌枠データベース</h1>
