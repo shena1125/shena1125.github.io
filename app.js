@@ -33,6 +33,10 @@ async function loadSongs() {
       const streamTypeLabel = typeMap[song.stream_type] || "その他";
 
       card.innerHTML = `
+  ${song.cover_image ? `<img  class="thumbnail"  
+    src="${song.cover_image}"  
+    alt="${song.song_title}"  
+    loading="lazy">` : ""}
   <div class="song-title">${song.song_title}</div>
   <div class="artist">${song.artist}</div>
 
