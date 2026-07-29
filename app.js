@@ -38,6 +38,7 @@ async function loadSongs() {
       card.dataset.original_song = song.original_song ? 'true' : 'false';
       card.dataset.full = song.full ? 'true' : 'false';
       card.dataset.stream_type = song.stream_type || "";
+      card.dataset.live_date = song.live_date || "";
 
       // 配信種別（日本語化）
       const streamTypeLabel = typeMap[song.stream_type] || "その他";
@@ -74,6 +75,7 @@ async function loadSongs() {
 
     const searchInput = document.getElementById('search');
     const streamFilterSelect = document.getElementById('filter-stream-type');
+    const sortSelect = document.getElementById('sort-order');
 
     function matchesSearch(card, keyword) {
       if (!keyword) return true;
@@ -111,20 +113,51 @@ async function loadSongs() {
         acc[filter.datasetKey] = checkbox ? checkbox.checked : false;
         return acc;
       }, {});
-
       const selectedStreamType = streamFilterSelect?.value || 'all';
-
+      const sortOrder = sortSelect?.value || 'newest';
+    
+      const visibleCards = [];
+    
       document.querySelectorAll('.song-card').forEach(card => {
         const visible =
           matchesSearch(card, keyword) &&
           matchesCheckboxFilters(card, activeFilters) &&
           matchesStreamType(card, selectedStreamType);
-
+    
         card.style.display = visible ? 'block' : 'none';
+        if (visible) visibleCards.push(card);
       });
+    
+      visibleCards.sort((a, b) => {
+        if (sortOrder === 'newest' || sortOrder === 'oldest') {
+          const aDate = new Date(a.dataset.live_date);
+          const bDate = new Date(b.dataset.live_date);
+          return sortOrder === 'newest' ? bDate - aDate : aDate - bDate;
+        }
+        if (sortOrder === 'title') {
+          return a.querySelector('.song-title').textContent.localeCompare(
+            b.querySelector('.song-title').textContent,
+            'ja'
+          );
+        }
+        if (sortOrder === 'artist') {
+          return a.querySelector('.artist').textContent.localeCompare(
+            b.querySelector('.artist').textContent,
+            'ja'
+          );
+        }
+        return 0;
+      });
+    
+      visibleCards.forEach(card => list.appendChild(card));
+    
+      const resultCount = document.getElementById('result-count');
+      if (resultCount) {
+        resultCount.textContent = `検索結果：${visibleCards.length}件`;
+      }
     }
 
-    // 検索イベントをここで登録
+    // 検索・フィルター・並び替えイベントを登録
     if (searchInput) {
       searchInput.addEventListener('input', applyDisplay);
     }
@@ -138,6 +171,10 @@ async function loadSongs() {
 
     if (streamFilterSelect) {
       streamFilterSelect.addEventListener('change', applyDisplay);
+    }
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', applyDisplay);
     }
 
     applyDisplay();
