@@ -24,9 +24,10 @@ async function loadSongs() {
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
-      // Phase2 Step1: 検索対象に配信タイトルとアニメ・ゲーム名を追加
+      // Phase2 Step1: 検索対象に配信タイトルと作品名を追加
       card.dataset.live_title = song.live_title || "";
-      card.dataset.anime_game = song.anime_game || "";
+      card.dataset.work_name = song.work_name || "";
+      card.dataset.work_name_reading = song.work_name_reading || "";
 
       // 配信種別（日本語化）
       const streamTypeLabel = typeMap[song.stream_type] || "その他";
@@ -41,7 +42,7 @@ async function loadSongs() {
   ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
 
   <div class="stream-type">🎤 ${streamTypeLabel}</div>
-  ${song.anime_game ? `<div class="anime-game">🎬 ${song.anime_game}</div>` : ""}
+  ${song.work_name ? `<div class="work-name">🎬 ${song.work_name}</div>` : ""}
 
   <div class="full-flag">🎵 ${song.full ? "フル" : "ワンコーラス"}</div>
 
@@ -69,11 +70,12 @@ async function loadSongs() {
           const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
           const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
 
-          // Phase2 Step1: 配信タイトル・アニメ・ゲーム名も検索対象に追加
+          // Phase2 Step1: 配信タイトル・作品名も検索対象に追加
           const liveTitle = card.dataset.live_title?.toLowerCase() || "";
-          const animeGame = card.dataset.anime_game?.toLowerCase() || "";
+          const workName = card.dataset.work_name?.toLowerCase() || "";
+          const workNameReading = card.dataset.work_name_reading?.toLowerCase() || "";
 
-          const text = `${title} ${artist} ${titleReading} ${artistReading} ${liveTitle} ${animeGame}`;
+          const text = `${title} ${artist} ${titleReading} ${artistReading} ${liveTitle} ${workName} ${workNameReading}`;
           card.style.display = text.includes(keyword) ? 'block' : 'none';
         });
       });
