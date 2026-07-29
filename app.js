@@ -16,11 +16,16 @@ async function loadSongs() {
       others: "その他"
     };
 
+    const filterDefinitions = [
+      { id: 'filter-first', datasetKey: 'first' },
+      { id: 'filter-original', datasetKey: 'original_song' }
+    ];
+
     songs.forEach(song => {
       const card = document.createElement('div');
       card.className = 'song-card';
 
-            // dataset に読み情報を追加
+      // dataset に読み情報を追加
       card.dataset.song_title_reading = song.song_title_reading || "";
       card.dataset.artist_reading = song.artist_reading || "";
 
@@ -28,6 +33,8 @@ async function loadSongs() {
       card.dataset.live_title = song.live_title || "";
       card.dataset.work_name = song.work_name || "";
       card.dataset.work_name_reading = song.work_name_reading || "";
+      card.dataset.first = song.first ? 'true' : 'false';
+      card.dataset.original_song = song.original_song ? 'true' : 'false';
 
       // 配信種別（日本語化）
       const streamTypeLabel = typeMap[song.stream_type] || "その他";
@@ -62,28 +69,59 @@ async function loadSongs() {
 
     document.body.appendChild(list);
 
-    // 検索イベントをここで登録（確実に要素が存在するタイミング）
     const searchInput = document.getElementById('search');
-    if (searchInput) {
-      searchInput.addEventListener('input', e => {
-        const keyword = e.target.value.toLowerCase();
 
-               document.querySelectorAll('.song-card').forEach(card => {
-          const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
-          const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
-          const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
-          const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
+    function matchesSearch(card, keyword) {
+      if (!keyword) return true;
 
-          // Phase2 Step1: 配信タイトル・作品名も検索対象に追加
-          const liveTitle = card.dataset.live_title?.toLowerCase() || "";
-          const workName = card.dataset.work_name?.toLowerCase() || "";
-          const workNameReading = card.dataset.work_name_reading?.toLowerCase() || "";
+      const title = card.querySelector('.song-title')?.textContent.toLowerCase() || "";
+      const artist = card.querySelector('.artist')?.textContent.toLowerCase() || "";
+      const titleReading = card.dataset.song_title_reading?.toLowerCase() || "";
+      const artistReading = card.dataset.artist_reading?.toLowerCase() || "";
 
-          const text = `${title} ${artist} ${titleReading} ${artistReading} ${liveTitle} ${workName} ${workNameReading}`;
-          card.style.display = text.includes(keyword) ? 'block' : 'none';
-        });
+      // 検索・フィルター用dataset
+      const liveTitle = card.dataset.live_title?.toLowerCase() || "";
+      const workName = card.dataset.work_name?.toLowerCase() || "";
+      const workNameReading = card.dataset.work_name_reading?.toLowerCase() || "";
+
+      const text = `${title} ${artist} ${titleReading} ${artistReading} ${liveTitle} ${workName} ${workNameReading}`;
+      return text.includes(keyword);
+    }
+
+    function matchesFilters(card, activeFilters) {
+      return filterDefinitions.every(filter => {
+        if (!activeFilters[filter.datasetKey]) return true;
+        return card.dataset[filter.datasetKey] === 'true';
       });
     }
+
+    function applyDisplay() {
+      const keyword = searchInput?.value.toLowerCase() || "";
+      const activeFilters = filterDefinitions.reduce((acc, filter) => {
+        const checkbox = document.getElementById(filter.id);
+        acc[filter.datasetKey] = checkbox ? checkbox.checked : false;
+        return acc;
+      }, {});
+
+      document.querySelectorAll('.song-card').forEach(card => {
+        const visible = matchesSearch(card, keyword) && matchesFilters(card, activeFilters);
+        card.style.display = visible ? 'block' : 'none';
+      });
+    }
+
+    // 検索イベントをここで登録
+    if (searchInput) {
+      searchInput.addEventListener('input', applyDisplay);
+    }
+
+    filterDefinitions.forEach(filter => {
+      const checkbox = document.getElementById(filter.id);
+      if (checkbox) {
+        checkbox.addEventListener('change', applyDisplay);
+      }
+    });
+
+    applyDisplay();
 
   } catch (e) {
     console.error('読み込み失敗：', e);
