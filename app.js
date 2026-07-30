@@ -42,7 +42,9 @@ async function loadSongs() {
 
       card.innerHTML = `
     ${song.cover_image ? `<img class="thumbnail" src="${song.cover_image}" alt="${song.song_title}" loading="lazy">` : ""}
-    <div class="song-title">${song.song_title}</div>
+    <div class="song-title" title="${song.song_title}">
+      ${song.song_title}
+    </div>
     <div class="artist">${song.artist}</div>
     <div class="live-date">📅 ${song.live_date}</div>
   
