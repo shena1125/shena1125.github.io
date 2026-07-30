@@ -40,29 +40,34 @@ async function loadSongs() {
       card.dataset.stream_type = song.stream_type || "";
       card.dataset.live_date = song.live_date || "";
 
-      // 配信種別（日本語化）
-      const streamTypeLabel = typeMap[song.stream_type] || "その他";
-
       card.innerHTML = `
-  ${song.cover_image ? `<img  class="thumbnail"  
-    src="${song.cover_image}"  
-    alt="${song.song_title}"  
-    loading="lazy">` : ""}
-  <div class="song-title">${song.song_title}</div>
-  <div class="artist">${song.artist}</div>
-
-  <div class="live-date">📅 ${song.live_date}</div>
-  <div class="live-title">📺 ${song.live_title}</div>
-
-  ${song.first ? `<div class="first-flag">⭐ 初披露</div>` : ""}
-
-  <div class="stream-type">🎤 ${streamTypeLabel}</div>
-  ${song.work_name ? `<div class="work-name">🎬 ${song.work_name}</div>` : ""}
-
-  <div class="full-flag">🎵 ${song.full ? "フル" : "ワンコーラス"}</div>
-
-  <a class="live-link" href="${song.youtube_link}" target="_blank">配信を見る</a>
-`;
+    ${song.cover_image ? `<img class="thumbnail" src="${song.cover_image}" alt="${song.song_title}" loading="lazy">` : ""}
+    <div class="song-title">${song.song_title}</div>
+    <div class="artist">${song.artist}</div>
+    <div class="live-date">📅 ${song.live_date}</div>
+  
+    <div class="badge-row">
+      ${song.first ? `<span class="badge-pill badge-first">初披露</span>` : ""}
+      <span class="badge-pill badge-full">${song.full ? "フル" : "ワンコーラス"}</span>
+      ${song.original_song ? `<span class="badge-pill badge-original">オリジナル</span>` : ""}
+    </div>
+  
+    <div class="card-actions">
+     <button
+       type="button"
+       class="card-button detail-button"
+       data-song-id="${song.song_id}">
+       詳細を見る
+     </button>
+    
+     <a class="live-link"
+        href="${song.youtube_link}"
+        target="_blank"
+        rel="noopener noreferrer">
+        ▶ 配信を見る
+     </a>
+    </div>
+    `; 
 
       list.appendChild(card);
     });
