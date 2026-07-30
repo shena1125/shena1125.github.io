@@ -8,11 +8,121 @@ body {
 }
 
 .page-title {
+  position: relative;
   text-align: center;
   margin: 8px 0 28px;
   padding: 4px 0 0;
+  isolation: isolate;
 }
 
+.title-content {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+}
+
+.title-decor {
+  position: absolute;
+  top: 50%;
+  width: 104px;
+  height: 104px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.95;
+  z-index: 0;
+  overflow: visible;
+
+  transition: all 0.3s ease;
+}
+
+.title-decor-left {
+  left: 18%;
+  transform: translateY(-50%) rotate(-11deg);
+}
+
+.title-decor-right {
+  right: 18%;
+  transform: translateY(-50%) rotate(9deg);
+}
+
+.decor-shape {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(181,124,255,.22));
+  animation: floatDecor 6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.decor-triangle {
+  stroke: #c79cff;
+  fill: none;
+  opacity: 0.55;
+  animation-duration: 6.4s;
+  animation-delay: -1s;
+  transform: rotate(-12deg);
+  transform-origin: center;
+}
+
+.decor-circle {
+  stroke: #d9b8ff;
+  fill: none;
+  opacity: 0.45;
+  animation-duration: 5.4s;
+  animation-delay: -0.6s;
+  stroke-width: 1.8;
+}
+
+.decor-diamond {
+  stroke: #e6ccff;
+  fill: none;
+  opacity: 0.40;
+  animation-duration: 6.8s;
+  animation-delay: -1.4s;
+  transform: rotate(16deg);
+  transform-origin: center;
+}
+
+.decor-plus {
+  stroke: #b57cff;
+  stroke-width: 2.8;
+  opacity: 0.50;
+  animation-duration: 5.8s;
+  animation-delay: -2s;
+  transform: scale(.82);
+  transform-origin: center;
+}
+
+@keyframes floatDecor {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(1.4deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .title-decor {
+    width: 72px;
+    height: 72px;
+    opacity: 0.8;
+  }
+
+  .title-decor-left {
+    left: 2%;
+  }
+
+  .title-decor-right {
+    right: 2%;
+  }
+
+  .decor-shape {
+    stroke-width: 2;
+  }
+}
 .page-title h1 {
   font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Segoe UI", sans-serif;
   font-size: clamp(2.8rem, 6vw, 4rem);
@@ -46,13 +156,26 @@ body {
     transform:translateY(-0.05em);
 }
 
-.page-title .subtitle {
-  margin-top: -2px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.16em;
-  color: #7a6d8d;
+.page-title .subtitle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+}
+
+.page-title .subtitle::before,
+.page-title .subtitle::after{
+    content:"";
+    width:70px;
+    height:2px;
+    border-radius:999px;
+    background:linear-gradient(
+        to right,
+        transparent,
+        #d9b8ff,
+        transparent
+    );
+    opacity:.55;
 }
 
 #search {
