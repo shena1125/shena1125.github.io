@@ -1,4 +1,103 @@
+const songsById = new Map();
+const modalOverlay = document.getElementById('modal-overlay');
+const modalCloseButton = document.querySelector('.modal-close');
+
+function formatStartTime(seconds) {
+  const secs = Number(seconds);
+
+  if (Number.isNaN(secs)) return "-";
+
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+
+  if (h > 0) {
+    return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function createInfoRow(label, value) {
+  const row = document.createElement('div');
+  row.className = 'modal-info-row';
+  row.innerHTML = `
+    <div class="modal-info-label">${label}</div>
+    <div class="modal-info-value">${value || '-'}</div>
+  `;
+  return row;
+}
+
+function createStatusBadge(label, active) {
+  if (!active) return null;
+
+  const badge = document.createElement('span');
+  badge.className = 'modal-badge modal-badge--active';
+  badge.textContent = label;
+  return badge;
+}
+
+function openModal(songId) {
+  const song = songsById[songId];
+  if (!song) return;
+  renderModal(song);
+  modalOverlay.classList.remove('hidden');
+  modalOverlay.setAttribute('aria-hidden', 'false');
+  modalOverlay.scrollTop = 0;
+  document.body.classList.add('modal-open');
+}
+
+function closeModal() {
+  modalOverlay.classList.add('hidden');
+  modalOverlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
+
+function renderModal(song) {
+  const thumbnail = document.getElementById('modal-thumbnail');
+
+if (song.cover_image) {
+  thumbnail.src = song.cover_image;
+  thumbnail.alt = song.song_title || "サムネイル";
+  thumbnail.style.display = "block";
+} else {
+  thumbnail.removeAttribute("src");
+  thumbnail.alt = "";
+  thumbnail.style.display = "none";
+}
+  document.getElementById('modal-song-title').textContent = song.song_title;
+  document.getElementById('modal-artist').textContent = song.artist;
+
+  const streamInfo = document.getElementById('modal-stream-info');
+  streamInfo.innerHTML = '';
+  streamInfo.appendChild(createInfoRow('📺 配信タイトル', song.live_title));
+  streamInfo.appendChild(createInfoRow('📅 配信日', song.live_date));
+  streamInfo.appendChild(createInfoRow('⏰ 歌唱開始時間', formatStartTime(song.start_seconds)));
+
+  const singingInfo = document.getElementById('modal-singing-info');
+  singingInfo.innerHTML = '';
+[
+  createStatusBadge('初歌唱', song.first),
+  createStatusBadge('フル歌唱', song.full),
+  createStatusBadge('デュエット', song.duet)
+].forEach(badge => {
+  if (badge) singingInfo.appendChild(badge);
+});
+
+  const duetSection = document.getElementById('modal-duet-partner-section');
+  if (song.duet && Array.isArray(song.duet_partner) && song.duet_partner.length > 0) {
+    duetSection.classList.remove('hidden');
+    document.getElementById('modal-duet-partner').textContent = song.duet_partner.join(' / ');
+  } else {
+    duetSection.classList.add('hidden');
+  }
+
+  const watchButton = document.getElementById('modal-watch-button');
+  watchButton.href = song.youtube_link || song.live_url || '#';
+}
+
 async function loadSongs() {
+
   try {
     const res = await fetch('./songs.json');
     const songs = await res.json();
@@ -23,7 +122,10 @@ async function loadSongs() {
     ];
 
     songs.forEach(song => {
-      const card = document.createElement('div');
+
+    songsById[song.song_id] = song;
+
+    const card = document.createElement('div');
       card.className = 'song-card';
 
       // dataset に読み情報を追加
@@ -59,17 +161,20 @@ async function loadSongs() {
        type="button"
        class="card-button detail-button"
        data-song-id="${song.song_id}">
-       詳細を見る
+       詳細
      </button>
     
      <a class="live-link"
         href="${song.youtube_link}"
         target="_blank"
         rel="noopener noreferrer">
-        ▶ 配信を見る
+        ▶ 配信
      </a>
     </div>
     `; 
+    card.querySelector('.detail-button').addEventListener('click', () => {
+    openModal(song.song_id);
+   });
 
       list.appendChild(card);
     });
@@ -185,6 +290,24 @@ async function loadSongs() {
     }
 
     applyDisplay();
+    if (modalCloseButton) {
+    modalCloseButton.addEventListener('click', closeModal);
+    }
+    if (modalOverlay) {
+     modalOverlay.addEventListener('click', event => {
+      if (event.target === modalOverlay) {
+       closeModal();
+     }
+   });
+    }
+    document.addEventListener('keydown', event => {
+      if (
+        event.key === 'Escape' &&
+        !modalOverlay.classList.contains('hidden')
+      ) {
+        closeModal();
+     }
+   });
 
   } catch (e) {
     console.error('読み込み失敗：', e);

@@ -259,18 +259,27 @@ body {
 
 .song-card {
   background: #ffffff;
-  border-radius: 14px;
+  border: 1px solid #efe8ff;
+  border-radius: 18px;
   padding: 14px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+
+  box-shadow:
+    0 8px 24px rgba(181,124,255,.08);
+
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
 }
 
-.song-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+.song-card:hover{
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 12px 30px rgba(181,124,255,.18);
 }
 
 .song-title {
@@ -313,32 +322,30 @@ body {
   color: #374151;
 }
 
-.badge-first {
-  background: #fde68a;
-  color: #92400e;
+.badge-first{
+    background:#fef3c7;
+    color:#b45309;
 }
 
-.badge-full {
-  background: #dbeafe;
-  color: #1d4ed8;
+.badge-full{
+    background:#ede9fe;
+    color:#6d28d9;
 }
 
-.badge-original {
-  background: #dcfce7;
-  color: #166534;
+.badge-original{
+    background:#f5f3ff;
+    color:#7c3aed;
 }
 
-.card-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-  flex-wrap: wrap;
+.card-actions{
+    display:flex;
+    gap:8px;
+    margin-top:6px;
 }
 
 .card-button,
 .live-link {
   flex: 1;
-  min-width: 120px;
   text-align: center;
   border-radius: 10px;
   padding: 10px 12px;
@@ -349,26 +356,26 @@ body {
   transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-.card-button {
-  background: #f3f4f6;
-  color: #111827;
-  border-color: #d1d5db;
-  cursor: pointer;
+.card-button{
+    background:#f8f2ff;
+    border:1px solid #e6d6ff;
+    color:#7c3aed;
+    cursor:pointer;
 }
 
-.card-button:hover {
-  background: #e5e7eb;
-  transform: translateY(-2px);
+.card-button:hover{
+    background:#efe6ff;
+    transform:translateY(-2px);
 }
 
-.live-link {
-  background: #2563eb;
-  color: #ffffff;
+.live-link{
+    background:#9b6cff;
+    color:#fff;
 }
 
-.live-link:hover {
-  background: #1d4ed8;
-  transform: translateY(-2px);
+.live-link:hover{
+    background:#8b5cf6;
+    transform:translateY(-2px);
 }
 
 .thumbnail {
@@ -378,6 +385,14 @@ body {
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 12px;
+  transition:
+    transform .25s ease;
+}
+
+.song-card:hover .thumbnail{
+
+    transform:scale(1.03);
+
 }
 
 .result-area {
@@ -411,4 +426,244 @@ body {
   border-radius: 8px;
   background: #fff;
   min-width: 180px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(32, 18, 71, 0.45);
+  backdrop-filter: blur(6px);
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-content {
+  width: min(700px, 100%);
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 30px 70px rgba(87, 63, 140, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display:flex;
+  justify-content:flex-end;
+  padding:20px 24px 10px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.modal-subtitle {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  border: none;
+  background: #f4f1ff;
+  color: #4b3c86;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding:8px 24px 24px;
+  display: grid;
+  gap: 20px;
+}
+
+.modal-thumbnail-wrap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.modal-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.modal-info-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.modal-info-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  background: #f8f2ff;
+  border-radius: 18px;
+}
+
+.modal-info-label {
+  font-size: 0.88rem;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.modal-info-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.modal-section {
+  display: grid;
+  gap: 12px;
+}
+
+.modal-section-title {
+  font-size: 0.95rem;
+  color: #4b5563;
+  font-weight: 700;
+}
+
+.modal-section-list {
+  display: grid;
+  gap: 10px;
+}
+
+.modal-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  align-items:flex-start;
+}
+
+.modal-info-row .modal-info-label {
+  min-width:120px;
+  flex-shrink:0;
+  white-space:nowrap;
+}
+
+.modal-info-row .modal-info-value{
+  flex:1;
+  text-align:left;
+  white-space:normal;
+  word-break:break-word;
+}
+
+.modal-badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.modal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #f5f3ff;
+  color: #5b21b6;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.modal-badge--active {
+  background: #ede9fe;
+  color: #4c1d95;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-footer {
+  padding:20px 24px 28px;
+}
+
+.modal-action-button {
+  display: inline-flex;
+  width: 100%;
+  box-sizing:border-box;
+  justify-content: center;
+  padding: 15px 18px;
+  border-radius: 16px;
+  background: #7c3aed;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background-color .2s ease,
+              transform .2s ease;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.modal-action-button:hover{
+  transform:translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124,58,237,.28);
+
+}
+
+.modal-action-button:hover {
+  background: #6d28d9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 560px) {
+  .modal-content {
+    border-radius: 18px;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+.modal-content{
+    scrollbar-width:thin;
+    scrollbar-color:#d8c3ff transparent;
+}
+
+.modal-content::-webkit-scrollbar{
+    width:8px;
+}
+
+.modal-content::-webkit-scrollbar-track{
+    margin:18px 0;
+    background:transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb{
+    background:#d8c3ff;
+    border-radius:999px;
 }
