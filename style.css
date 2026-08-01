@@ -462,10 +462,25 @@ body.modal-open {
   flex-direction: column;
 }
 
-.modal-header {
-  display:flex;
-  justify-content:flex-end;
-  padding:20px 24px 10px;
+.modal-header{
+    position:sticky;
+    top:0;
+
+    display:flex;
+    justify-content:flex-end;
+
+    padding:18px 24px 8px;
+
+    background:#fff;
+
+    z-index:20;
+}
+.modal-header{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+
+    padding:18px 24px 8px;
 }
 
 .modal-header h2 {
