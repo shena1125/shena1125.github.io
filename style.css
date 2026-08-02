@@ -825,3 +825,165 @@ body.modal-open {
     opacity:1;
     transform:translateY(-50%) scale(1.08);
 }
+
+/* ==========================================
+   Responsive（768px以下）
+========================================== */
+
+@media (max-width:768px){
+
+  body{
+    padding:16px;
+  }
+
+  /* ---------- タイトル ---------- */
+
+  .page-title{
+    margin-bottom:20px;
+  }
+
+  .title-decor{
+    display:none;
+  }
+
+  .page-title .subtitle::before,
+  .page-title .subtitle::after{
+    width:40px;
+  }
+
+  /* ---------- 検索 ---------- */
+
+  .search-wrapper{
+    margin-bottom:16px;
+  }
+
+  #search{
+    max-width:100%;
+    margin-bottom:0;
+  }
+
+  /* ---------- フィルター ---------- */
+
+  .filter-area{
+    flex-direction:column;
+    gap:20px;
+    padding:16px;
+  }
+
+  .filter-section{
+    width:100%;
+  }
+
+  .filter-options{
+    flex-direction:column;
+  }
+
+  .filter-options label{
+    width:100%;
+    box-sizing:border-box;
+  }
+
+  .filter-section select{
+    width:100%;
+  }
+
+  .result-area{
+    min-width:auto;
+  }
+
+  .sort-row{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .sort-row select{
+    width:100%;
+  }
+
+  /* ---------- カード ---------- */
+
+  #song-list{
+  width: 100%;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  box-sizing: border-box;
+ }
+
+  .song-card{
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+ }
+
+  .card-button,
+  .live-link{
+
+    height:46px;
+
+  }
+
+  /* ---------- モーダル ---------- */
+
+  .modal-overlay{
+
+    padding:12px;
+
+  }
+
+  .modal-content{
+
+    max-height:95vh;
+
+    border-radius:18px;
+
+  }
+
+  .modal-header{
+
+    padding:16px 16px 8px;
+
+  }
+
+  .modal-body{
+
+    padding:8px 16px 20px;
+
+  }
+
+  .modal-footer{
+
+    padding:18px 16px 20px;
+
+  }
+
+  .modal-info-row{
+
+    flex-direction:column;
+
+    gap:4px;
+
+  }
+
+  .modal-info-row .modal-info-label{
+
+    min-width:auto;
+
+  }
+
+  #song-list{
+  width:100%;
+  max-width:100%;
+  }
+
+ .song-card{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  }
+
+ .thumbnail{
+  width:100%;
+  max-width:100%;
+  }
+}
