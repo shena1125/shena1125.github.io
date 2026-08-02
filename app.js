@@ -55,7 +55,9 @@ function closeModal() {
 
 function renderModal(song) {
   const thumbnail = document.getElementById('modal-thumbnail');
-
+  const thumbnailLink = document.getElementById('modal-thumbnail-link');
+  thumbnailLink.href =
+   song.youtube_link || song.live_url || "#";
 if (song.cover_image) {
   thumbnail.src = song.cover_image;
   thumbnail.alt = song.song_title || "サムネイル";
@@ -143,7 +145,19 @@ async function loadSongs() {
       card.dataset.live_date = song.live_date || "";
 
       card.innerHTML = `
-    ${song.cover_image ? `<img class="thumbnail" src="${song.cover_image}" alt="${song.song_title}" loading="lazy">` : ""}
+    ${song.cover_image ? `
+    <a
+      href="${song.youtube_link}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="thumbnail-link">
+     <img
+     class="thumbnail"
+     src="${song.cover_image}"
+     alt="${song.song_title}"
+     loading="lazy">
+    </a>
+     ` : ""}
     <div class="song-title" title="${song.song_title}">
       ${song.song_title}
     </div>

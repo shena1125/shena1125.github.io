@@ -442,6 +442,13 @@ body {
   margin-bottom: 12px;
   transition:
     transform .25s ease;
+  cursor:pointer;
+}
+
+.thumbnail-link{
+    display:block;
+    overflow:hidden;
+    border-radius:16px;
 }
 
 .song-card:hover .thumbnail{
@@ -586,6 +593,22 @@ body.modal-open {
   aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
+  cursor:pointer;
+}
+
+#modal-thumbnail-link{
+    display:block;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.thumbnail-link:hover .thumbnail,
+#modal-thumbnail-link:hover .modal-thumbnail{
+
+    transform:scale(1.03);
+
+    filter:brightness(.95);
+
 }
 
 .modal-info-grid {
