@@ -79,7 +79,7 @@ if (song.cover_image) {
   const singingInfo = document.getElementById('modal-singing-info');
   singingInfo.innerHTML = '';
 [
-  createStatusBadge('初歌唱', song.first),
+  createStatusBadge('初披露', song.first),
   createStatusBadge('フル歌唱', song.full),
   createStatusBadge('デュエット', song.duet)
 ].forEach(badge => {
@@ -175,7 +175,7 @@ async function loadSongs() {
        type="button"
        class="card-button detail-button"
        data-song-id="${song.song_id}">
-       詳細
+       ⓘ詳細
      </button>
     
      <a class="live-link"

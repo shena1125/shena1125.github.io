@@ -366,7 +366,7 @@ body {
 .badge-pill {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 700;
@@ -375,8 +375,8 @@ body {
 }
 
 .badge-first{
-    background:#fef3c7;
-    color:#b45309;
+    background:#ede9fe;
+    color:#6d28d9;
 }
 
 .badge-full{
@@ -399,9 +399,13 @@ body {
 .live-link {
   flex: 1;
   text-align: center;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 0.95rem;
+  border-radius: 12px;
+  height: 42px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.92rem;
   font-weight: 700;
   text-decoration: none;
   border: 1px solid transparent;
@@ -412,8 +416,8 @@ body {
 }
 
 .card-button{
-    background:#f8f2ff;
-    border:1px solid #e6d6ff;
+    background:#f5efff;
+    border:1px solid #e0ceff;
     color:#7c3aed;
     cursor:pointer;
 }
@@ -421,16 +425,24 @@ body {
 .card-button:hover{
     background:#efe6ff;
     transform:translateY(-2px);
+    box-shadow:
+        0 6px 18px rgba(181,124,255,.18);
 }
 
 .live-link{
-    background:#9b6cff;
+    background:linear-gradient(
+        135deg,
+        #9b6cff,
+        #8b5cf6
+    );
     color:#fff;
 }
 
 .live-link:hover{
     background:#8b5cf6;
     transform:translateY(-2px);
+    box-shadow:
+        0 6px 18px rgba(181,124,255,.18);
 }
 
 .thumbnail {
@@ -589,11 +601,25 @@ body.modal-open {
 }
 
 .modal-thumbnail {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-  cursor:pointer;
+    width:100%;
+    aspect-ratio:16/9;
+    object-fit:cover;
+    display:block;
+    cursor:pointer;
+    transition:
+        transform .25s ease,
+        filter .25s ease;
+}
+
+#modal-thumbnail-link{
+    display:block;
+    overflow:hidden;
+    border-radius:18px;
+}
+
+#modal-thumbnail-link:hover .modal-thumbnail{
+    transform:scale(1.03);
+    filter:brightness(.94);
 }
 
 #modal-thumbnail-link{
@@ -689,15 +715,15 @@ body.modal-open {
   gap: 8px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: #f5f3ff;
-  color: #5b21b6;
+  background:#ede9fe;
+  color:#6d28d9;
   font-weight: 700;
   font-size: 0.95rem;
 }
 
 .modal-badge--active {
-  background: #ede9fe;
-  color: #4c1d95;
+  background:#ede9fe;
+  color:#6d28d9;
 }
 
 .hidden {
