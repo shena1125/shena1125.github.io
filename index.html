@@ -30,9 +30,12 @@
       <polygon class="decor-shape decor-triangle" points="70,116 104,96 104,136" />
     </svg>
   </div>
-
-  <input type="text" id="search" placeholder="曲名・アーティスト・作品名などで検索">
-
+  <div class="search-wrapper">
+   <input
+    type="text"
+    id="search"
+    placeholder="曲名・アーティスト・作品名などで検索">
+  </div>
   <div class="filter-area">
     <div class="filter-section">
       <div class="filter-title">フィルター</div>
@@ -57,8 +60,9 @@
     </div>
 
     <div class="filter-section result-area">
-      <div class="filter-title">検索結果</div>
-      <div id="result-count">検索結果：0件</div>
+    <div id="result-count" class="filter-title">
+        🎵 検索結果：0件
+    </div>
       <div class="sort-row">
         <label for="sort-order">並び替え</label>
         <select id="sort-order">

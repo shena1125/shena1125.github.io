@@ -247,13 +247,22 @@ async function loadSongs() {
           return sortOrder === 'newest' ? bDate - aDate : aDate - bDate;
         }
         if (sortOrder === 'title') {
-          return a.querySelector('.song-title').textContent.localeCompare(
-            b.querySelector('.song-title').textContent,
-            'ja'
+          return (
+           a.dataset.song_title_reading ||
+           a.querySelector('.song-title').textContent
+          ).localeCompare(
+           b.dataset.song_title_reading ||
+           b.querySelector('.song-title').textContent,
+          'ja'
           );
         }
+
         if (sortOrder === 'artist') {
-          return a.querySelector('.artist').textContent.localeCompare(
+          return (
+            a.dataset.artist_reading ||
+            a.querySelector('.artist').textContent
+          ).localeCompare(
+            b.dataset.artist_reading ||
             b.querySelector('.artist').textContent,
             'ja'
           );
@@ -265,7 +274,7 @@ async function loadSongs() {
     
       const resultCount = document.getElementById('result-count');
       if (resultCount) {
-        resultCount.textContent = `検索結果：${visibleCards.length}件`;
+        resultCount.textContent = `🎵 検索結果：${visibleCards.length}件`;
       }
     }
 
