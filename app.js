@@ -1,6 +1,9 @@
 const songsById = new Map();
 const modalOverlay = document.getElementById('modal-overlay');
 const modalCloseButton = document.querySelector('.modal-close');
+const filterToggle = document.getElementById('filter-toggle');
+const filterContent = document.getElementById('filter-content');
+const filterToggleIcon = document.getElementById('filter-toggle-icon');
 
 function formatStartTime(seconds) {
   const secs = Number(seconds);
@@ -338,3 +341,17 @@ async function loadSongs() {
 }
 
 loadSongs();
+
+if (filterToggle) {
+
+  filterToggle.addEventListener('click', () => {
+
+    filterContent.classList.toggle('open');
+
+    filterToggleIcon.textContent =
+      filterContent.classList.contains('open')
+        ? '▲'
+        : '▼';
+
+  });
+}

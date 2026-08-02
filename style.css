@@ -826,6 +826,15 @@ body.modal-open {
     transform:translateY(-50%) scale(1.08);
 }
 
+/* フィルター開閉ボタン（PCでは非表示） */
+.filter-toggle{
+    display:none;
+}
+
+#filter-content{
+  display: contents;
+}
+
 /* ==========================================
    Responsive（768px以下）
 ========================================== */
@@ -833,7 +842,7 @@ body.modal-open {
 @media (max-width:768px){
 
   body{
-    padding:16px;
+    padding: 12px;
   }
 
   /* ---------- タイトル ---------- */
@@ -844,6 +853,10 @@ body.modal-open {
 
   .title-decor{
     display:none;
+  }
+
+  .page-title h1{
+    font-size:2.7rem;
   }
 
   .page-title .subtitle::before,
@@ -860,9 +873,92 @@ body.modal-open {
   #search{
     max-width:100%;
     margin-bottom:0;
+    padding:14px 48px 14px 16px;
   }
 
   /* ---------- フィルター ---------- */
+  .filter-toggle{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    width:100%;
+
+    padding:16px 18px;
+
+    background:#ffffff;
+
+    border:1px solid #dccbff;
+    border-radius:18px;
+
+    box-sizing:border-box;
+
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:700;
+    color:#7b2ff7;
+
+    cursor:pointer;
+
+    appearance:none;
+    -webkit-appearance:none;
+
+    transition:
+        border-color .25s,
+        box-shadow .25s,
+        background .25s;
+  }
+
+  .filter-toggle:hover{
+    background:#ffffff;
+    border-color:#c9afff;
+    box-shadow:
+        0 0 0 4px rgba(181,124,255,.10);
+}
+
+.filter-toggle:focus-visible{
+    outline:none;
+    border-color:#b57cff;
+    box-shadow:
+        0 0 0 4px rgba(181,124,255,.15);
+}
+
+#filter-toggle-icon{
+
+    font-size:.9rem;
+
+    transition:
+        transform .25s;
+
+}
+
+.filter-toggle-text{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.filter-icon{
+
+    font-size:1rem;
+
+}
+
+  #filter-content{
+
+    display:none;
+
+}
+
+ #filter-content.open{
+    display:block;
+    padding-top:20px;
+}
 
   .filter-area{
     flex-direction:column;
@@ -872,6 +968,11 @@ body.modal-open {
 
   .filter-section{
     width:100%;
+    margin-bottom:24px;
+  }
+
+  .filter-section:last-child{
+    margin-bottom:0;
   }
 
   .filter-options{
@@ -916,6 +1017,9 @@ body.modal-open {
   padding: 16px;
  }
 
+ .card-actions{
+  gap:12px;
+ }
   .card-button,
   .live-link{
 
