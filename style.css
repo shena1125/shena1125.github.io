@@ -845,6 +845,22 @@ body.modal-open {
     padding: 12px;
   }
 
+
+  /* ==========================================
+   上部固定エリア
+========================================== */
+
+ .sticky-search-area{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    background:#fafafa;
+
+    padding-top:12px;
+    padding-bottom:12px;
+
+  }
   /* ---------- タイトル ---------- */
 
   .page-title{
@@ -964,6 +980,7 @@ body.modal-open {
 
     box-shadow:
       0 4px 14px rgba(181,124,255,.08);
+    margin-bottom:10px;
 
 }
 
