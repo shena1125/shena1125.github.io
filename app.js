@@ -348,10 +348,10 @@ if (filterToggle) {
 
     filterContent.classList.toggle('open');
 
-    filterToggleIcon.textContent =
-      filterContent.classList.contains('open')
-        ? '▲'
-        : '▼';
+    filterToggleIcon.style.transform =
+     filterContent.classList.contains('open')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
 
   });
 }
