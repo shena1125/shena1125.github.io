@@ -640,6 +640,7 @@ body.modal-open {
 .modal-info-grid {
   display: grid;
   gap: 14px;
+  margin-top: 16px;
 }
 
 .modal-info-card {
@@ -667,6 +668,7 @@ body.modal-open {
 .modal-section {
   display: grid;
   gap: 12px;
+  margin-top: 16px;
 }
 
 .modal-section-title {
@@ -1083,9 +1085,17 @@ body.modal-open {
 
   .modal-header{
 
-    padding:16px 16px 8px;
+    position: sticky;
 
-  }
+    top: 0;
+
+    z-index: 10;
+
+    background: rgba(255,255,255,.75);
+
+    backdrop-filter: blur(8px);
+
+}
 
   .modal-body{
 
