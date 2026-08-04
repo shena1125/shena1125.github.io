@@ -954,13 +954,31 @@ body.modal-open {
 
   #filter-content{
 
-    display:none;
+    display:block;
+
+    max-height:0;
+
+    opacity:0;
+
+    overflow:hidden;
+
+    padding:0 18px;
+
+    transition:
+      max-height .35s ease,
+      opacity .25s ease,
+      padding .25s ease;
 
 }
 
  #filter-content.open{
-    display:block;
+
+    max-height:700px;
+
+    opacity:1;
+
     padding:0 18px 18px;
+
 }
 
   .filter-area{
@@ -1110,4 +1128,68 @@ body.modal-open {
   width:100%;
   max-width:100%;
   }
+}
+
+/* ==========================================
+   上に戻るボタン
+========================================== */
+
+.back-to-top{
+
+  position: fixed;
+
+  right: max(20px, calc((100vw - 1120px) / 2 + 20px));
+  bottom: 20px;
+
+  width: 52px;
+  height: 52px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #8b5cf6;
+  color: #fff;
+
+  font-size: 1.4rem;
+  font-weight: bold;
+
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px);
+
+  box-shadow:
+    0 8px 20px rgba(139,92,246,.25);
+
+  transition:
+    opacity .25s ease,
+    transform .25s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+
+  z-index: 999;
+}
+
+.back-to-top:hover{
+
+  background:#7c3aed;
+
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 12px 28px rgba(139,92,246,.35);
+
+}
+
+.back-to-top.show{
+
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+
+  transform: translateY(0);
+
 }

@@ -355,3 +355,43 @@ if (filterToggle) {
 
   });
 }
+
+// ===============================
+// 上に戻るボタン 表示制御
+// ===============================
+
+const backToTopButton = document.getElementById('back-to-top');
+
+function toggleBackToTopButton() {
+
+  if (!backToTopButton) return;
+
+  if (window.scrollY > 300) {
+    backToTopButton.classList.add('show');
+  } else {
+    backToTopButton.classList.remove('show');
+  }
+
+}
+
+window.addEventListener('scroll', toggleBackToTopButton);
+
+// 初期表示
+toggleBackToTopButton();
+
+// ===============================
+// 上に戻る
+// ===============================
+
+if (backToTopButton) {
+
+  backToTopButton.addEventListener('click', () => {
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  });
+
+}
