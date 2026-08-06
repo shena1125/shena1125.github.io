@@ -72,6 +72,7 @@ if (song.cover_image) {
 }
   document.getElementById('modal-song-title').textContent = song.song_title;
   document.getElementById('modal-artist').textContent = song.artist;
+  document.getElementById('modal-work-title').textContent = song.work_name || '―';
 
   const streamInfo = document.getElementById('modal-stream-info');
   streamInfo.innerHTML = '';
