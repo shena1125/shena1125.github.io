@@ -1203,3 +1203,50 @@ body.modal-open {
   transform: translateY(0);
 
 }
+
+/* ========================================
+   Footer
+======================================== */
+
+.site-footer{
+    margin-top:80px;
+    padding:36px 20px 48px;
+
+    text-align:center;
+
+    border-top:1px solid #ece5ff;
+
+    color:#6b7280;
+    font-size:.9rem;
+    line-height:1.8;
+}
+
+.footer-copy{
+    font-weight:700;
+    color:#4f46e5;
+    margin-bottom:12px;
+}
+
+.footer-text{
+    margin:4px 0;
+}
+
+.footer-contact{
+    margin-top:18px;
+}
+
+.footer-contact a{
+    color:#7c3aed;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.footer-contact a:hover{
+    text-decoration:underline;
+}
+
+.footer-message{
+    margin-bottom:16px;
+    color:#a78bfa;
+    font-size:.85rem;
+}

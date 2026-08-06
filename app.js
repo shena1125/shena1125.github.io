@@ -198,9 +198,11 @@ async function loadSongs() {
 
     // 「読み込み中...」を消す
     const resultDiv = document.getElementById('result');
-    if (resultDiv) resultDiv.remove();
 
-    document.body.appendChild(list);
+    if (resultDiv) {
+     resultDiv.innerHTML = "";
+     resultDiv.appendChild(list);
+    }
 
     const searchInput = document.getElementById('search');
     const streamFilterSelect = document.getElementById('filter-stream-type');
