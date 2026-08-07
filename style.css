@@ -1250,3 +1250,77 @@ body.modal-open {
     color:#a78bfa;
     font-size:.85rem;
 }
+
+/* ========================================
+   Pagination
+======================================== */
+
+.pagination{
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+
+  margin:40px 0 24px;
+
+  flex-wrap:wrap;
+
+}
+
+.pagination-button{
+
+  width:42px;
+  height:42px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:#ffffff;
+
+  border:1px solid #ddd6fe;
+
+  color:#6d28d9;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.2s;
+
+}
+
+.pagination-button:hover{
+
+  background:#f5efff;
+
+  transform:translateY(-2px);
+
+}
+
+.pagination-button.active{
+
+  background:#8b5cf6;
+
+  color:#ffffff;
+
+  border-color:#8b5cf6;
+
+}
+
+.pagination-button:disabled{
+
+  opacity:.4;
+
+  cursor:default;
+
+  transform:none;
+
+}
+
+.pagination-button:disabled:hover{
+
+  background:#ffffff;
+
+}

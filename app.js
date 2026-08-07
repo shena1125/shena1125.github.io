@@ -208,6 +208,8 @@ async function loadSongs() {
     const searchInput = document.getElementById('search');
     const streamFilterSelect = document.getElementById('filter-stream-type');
     const sortSelect = document.getElementById('sort-order');
+    const CARDS_PER_PAGE = 12;
+    let currentPage = 1;
 
     function matchesSearch(card, keyword) {
       if (!keyword) return true;
@@ -238,84 +240,284 @@ async function loadSongs() {
       return card.dataset.stream_type === selectedStreamType;
     }
 
-    function applyDisplay() {
-      const keyword = searchInput?.value.toLowerCase() || "";
-      const activeFilters = filterDefinitions.reduce((acc, filter) => {
-        const checkbox = document.getElementById(filter.id);
-        acc[filter.datasetKey] = checkbox ? checkbox.checked : false;
-        return acc;
-      }, {});
-      const selectedStreamType = streamFilterSelect?.value || 'all';
-      const sortOrder = sortSelect?.value || 'newest';
-    
-      const visibleCards = [];
-    
-      document.querySelectorAll('.song-card').forEach(card => {
-        const visible =
-          matchesSearch(card, keyword) &&
-          matchesCheckboxFilters(card, activeFilters) &&
-          matchesStreamType(card, selectedStreamType);
-    
-        card.style.display = visible ? 'block' : 'none';
-        if (visible) visibleCards.push(card);
-      });
-    
-      visibleCards.sort((a, b) => {
-        if (sortOrder === 'newest' || sortOrder === 'oldest') {
-          const aDate = new Date(a.dataset.live_date);
-          const bDate = new Date(b.dataset.live_date);
-          return sortOrder === 'newest' ? bDate - aDate : aDate - bDate;
-        }
-        if (sortOrder === 'title') {
-          return (
-           a.dataset.song_title_reading ||
-           a.querySelector('.song-title').textContent
-          ).localeCompare(
-           b.dataset.song_title_reading ||
-           b.querySelector('.song-title').textContent,
-          'ja'
-          );
-        }
+    function showCurrentPage(cards, scroll = false) {
 
-        if (sortOrder === 'artist') {
-          return (
-            a.dataset.artist_reading ||
-            a.querySelector('.artist').textContent
-          ).localeCompare(
-            b.dataset.artist_reading ||
-            b.querySelector('.artist').textContent,
-            'ja'
-          );
-        }
-        return 0;
+  const start = (currentPage - 1) * CARDS_PER_PAGE;
+  const end = start + CARDS_PER_PAGE;
+
+  cards.forEach((card, index) => {
+
+    card.style.display =
+      index >= start && index < end
+        ? "block"
+        : "none";
+
+  });
+
+  // ページ切替時だけスクロール
+  if (scroll) {
+
+    const songList = document.getElementById("song-list");
+
+    if (songList) {
+
+      const y =
+        songList.getBoundingClientRect().top +
+        window.pageYOffset -
+        100;   // ← 上部固定エリア分
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth"
       });
-    
-      visibleCards.forEach(card => list.appendChild(card));
-    
-      const resultCount = document.getElementById('result-count');
-      if (resultCount) {
-        resultCount.textContent = `🎵 検索結果：${visibleCards.length}件`;
-      }
+
     }
 
+  }
+
+}
+
+function renderPagination(cards) {
+
+  const pagination = document.getElementById("pagination");
+
+  if (!pagination) return;
+
+  pagination.innerHTML = "";
+
+  const totalPages = Math.ceil(cards.length / CARDS_PER_PAGE);
+
+  if (totalPages <= 1) return;
+
+  // ------------------------
+  // 前へ
+  // ------------------------
+
+  const prevButton = document.createElement("button");
+
+  prevButton.textContent = "‹";
+
+  prevButton.className = "pagination-button";
+
+  prevButton.disabled = currentPage === 1;
+
+  prevButton.addEventListener("click", () => {
+
+    if (currentPage > 1) {
+
+      currentPage--;
+
+      renderPagination(cards);
+
+      showCurrentPage(cards, true);
+
+    }
+
+  });
+
+  pagination.appendChild(prevButton);
+
+  // ------------------------
+  // ページ番号
+  // ------------------------
+
+  for (let page = 1; page <= totalPages; page++) {
+
+    const button = document.createElement("button");
+
+    button.textContent = page;
+
+    button.className = "pagination-button";
+
+    if (page === currentPage) {
+      button.classList.add("active");
+    }
+
+    button.addEventListener("click", () => {
+
+      currentPage = page;
+
+      renderPagination(cards);
+
+      showCurrentPage(cards, true);
+
+    });
+
+    pagination.appendChild(button);
+
+  }
+
+  // ------------------------
+  // 次へ
+  // ------------------------
+
+  const nextButton = document.createElement("button");
+
+  nextButton.textContent = "›";
+
+  nextButton.className = "pagination-button";
+
+  nextButton.disabled = currentPage === totalPages;
+
+  nextButton.addEventListener("click", () => {
+
+    if (currentPage < totalPages) {
+
+      currentPage++;
+
+      renderPagination(cards);
+
+      showCurrentPage(cards, true);
+
+    }
+
+  });
+
+  pagination.appendChild(nextButton);
+
+}
+
+function applyDisplay(resetPage = false) {
+
+  if (resetPage) {
+    currentPage = 1;
+  }
+  const keyword = searchInput?.value.toLowerCase() || "";
+
+  const activeFilters = filterDefinitions.reduce((acc, filter) => {
+    const checkbox = document.getElementById(filter.id);
+    acc[filter.datasetKey] = checkbox ? checkbox.checked : false;
+    return acc;
+  }, {});
+
+  const selectedStreamType = streamFilterSelect?.value || "all";
+  const sortOrder = sortSelect?.value || "newest";
+
+  // 検索結果を格納
+  const visibleCards = [];
+
+  // ------------------------
+  // 検索・フィルター
+  // ------------------------
+
+  document.querySelectorAll(".song-card").forEach(card => {
+
+    const visible =
+      matchesSearch(card, keyword) &&
+      matchesCheckboxFilters(card, activeFilters) &&
+      matchesStreamType(card, selectedStreamType);
+
+    if (visible) {
+      visibleCards.push(card);
+    } else {
+      card.style.display = "none";
+    }
+
+  });
+
+  // ------------------------
+  // 並び替え
+  // ------------------------
+
+  visibleCards.sort((a, b) => {
+
+    if (sortOrder === "newest" || sortOrder === "oldest") {
+
+      const aDate = new Date(a.dataset.live_date);
+      const bDate = new Date(b.dataset.live_date);
+
+      return sortOrder === "newest"
+        ? bDate - aDate
+        : aDate - bDate;
+    }
+
+    if (sortOrder === "title") {
+
+      return (
+        a.dataset.song_title_reading ||
+        a.querySelector(".song-title").textContent
+      ).localeCompare(
+
+        b.dataset.song_title_reading ||
+        b.querySelector(".song-title").textContent,
+
+        "ja"
+      );
+
+    }
+
+    if (sortOrder === "artist") {
+
+      return (
+        a.dataset.artist_reading ||
+        a.querySelector(".artist").textContent
+      ).localeCompare(
+
+        b.dataset.artist_reading ||
+        b.querySelector(".artist").textContent,
+
+        "ja"
+      );
+
+    }
+
+    return 0;
+
+  });
+
+  // ------------------------
+  // 並び替え後の順番で並べ直す
+  // ------------------------
+
+  visibleCards.forEach(card => {
+    list.appendChild(card);
+  });
+
+  // ------------------------
+  // 件数表示
+  // ------------------------
+
+  const resultCount = document.getElementById("result-count");
+
+  if (resultCount) {
+    resultCount.textContent =
+      `🎵 検索結果：${visibleCards.length}件`;
+  }
+
+  // ------------------------
+  // ページ表示
+  // ------------------------
+
+  renderPagination(visibleCards);
+  showCurrentPage(visibleCards);
+
+}
     // 検索・フィルター・並び替えイベントを登録
     if (searchInput) {
-      searchInput.addEventListener('input', applyDisplay);
+      searchInput.addEventListener('input', () => {
+  applyDisplay(true);
+});
     }
 
     filterDefinitions.forEach(filter => {
       const checkbox = document.getElementById(filter.id);
       if (checkbox) {
-        checkbox.addEventListener('change', applyDisplay);
+        checkbox.addEventListener('change', () => {
+  applyDisplay(true);
+});
       }
     });
 
     if (streamFilterSelect) {
-      streamFilterSelect.addEventListener('change', applyDisplay);
+      streamFilterSelect.addEventListener('change', () => {
+  applyDisplay(true);
+});
     }
 
     if (sortSelect) {
-      sortSelect.addEventListener('change', applyDisplay);
+      sortSelect.addEventListener('change', () => {
+  applyDisplay(true);
+});
     }
 
     applyDisplay();
