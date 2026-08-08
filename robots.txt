@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hajimenouta.com/sitemap.xml
