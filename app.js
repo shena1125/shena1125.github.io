@@ -258,13 +258,21 @@ async function loadSongs() {
   if (scroll) {
 
     const songList = document.getElementById("song-list");
+    const stickyArea = document.querySelector(".sticky-search-area");
 
     if (songList) {
 
+      // 上部固定エリアの現在の高さを取得
+      const stickyHeight = stickyArea
+        ? stickyArea.getBoundingClientRect().height
+        : 0;
+
+      // 固定エリアの下にカードが来るように調整
       const y =
         songList.getBoundingClientRect().top +
         window.pageYOffset -
-        100;   // ← 上部固定エリア分
+        stickyHeight -
+        16;
 
       window.scrollTo({
         top: y,
@@ -272,7 +280,6 @@ async function loadSongs() {
       });
 
     }
-
   }
 
 }
