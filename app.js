@@ -325,34 +325,80 @@ function renderPagination(cards) {
   pagination.appendChild(prevButton);
 
   // ------------------------
-  // ページ番号
-  // ------------------------
+// ページ番号
+// ------------------------
+
+const visiblePages = new Set();
+
+// ページ数が少ない場合は、すべて表示
+if (totalPages <= 7) {
 
   for (let page = 1; page <= totalPages; page++) {
+    visiblePages.add(page);
+  }
 
-    const button = document.createElement("button");
+} else {
 
-    button.textContent = page;
+  // 最初のページ
+  visiblePages.add(1);
 
-    button.className = "pagination-button";
+  // 最後のページ
+  visiblePages.add(totalPages);
 
-    if (page === currentPage) {
-      button.classList.add("active");
-    }
+  // 現在ページと、その前後
+  visiblePages.add(currentPage);
+  visiblePages.add(currentPage - 1);
+  visiblePages.add(currentPage + 1);
 
-    button.addEventListener("click", () => {
+}
 
-      currentPage = page;
+// ページ番号を順番に表示
+let lastPage = null;
 
-      renderPagination(cards);
+for (let page = 1; page <= totalPages; page++) {
 
-      showCurrentPage(cards, true);
+  // 表示対象でないページはスキップ
+  if (!visiblePages.has(page)) {
+    continue;
+  }
 
-    });
+  // ページ間に空きがある場合は「…」を表示
+  if (lastPage !== null && page - lastPage > 1) {
 
-    pagination.appendChild(button);
+    const ellipsis = document.createElement("span");
+
+    ellipsis.textContent = "…";
+    ellipsis.className = "pagination-ellipsis";
+
+    pagination.appendChild(ellipsis);
 
   }
+
+  const button = document.createElement("button");
+
+  button.textContent = page;
+
+  button.className = "pagination-button";
+
+  if (page === currentPage) {
+    button.classList.add("active");
+  }
+
+  button.addEventListener("click", () => {
+
+    currentPage = page;
+
+    renderPagination(cards);
+
+    showCurrentPage(cards, true);
+
+  });
+
+  pagination.appendChild(button);
+
+  lastPage = page;
+
+}
 
   // ------------------------
   // 次へ
