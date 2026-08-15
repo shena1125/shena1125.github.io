@@ -202,6 +202,9 @@ body {
   line-height: 24px;
   height: 52px;
 
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 400;
+
   -webkit-appearance: none;
   appearance: none;
 
