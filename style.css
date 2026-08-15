@@ -9,18 +9,12 @@ body {
 }
 
 .page-title {
-  position: relative;
   text-align: center;
-  margin: 8px 0 28px;
-  padding: 4px 0 0;
-  isolation: isolate;
+  margin: 8px 0 16px;
 }
 
 .title-content {
-  position: relative;
-  z-index: 1;
-  display: inline-block;
-
+  display: block;
   color: inherit;
   text-decoration: none;
 }
@@ -28,89 +22,6 @@ body {
 .title-content:hover {
   color: inherit;
   text-decoration: none;
-}
-
-.title-decor {
-  position: absolute;
-  top: 50%;
-  width: 104px;
-  height: 104px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  opacity: 0.95;
-  z-index: 0;
-  overflow: visible;
-
-  transition: all 0.3s ease;
-}
-
-.title-decor-left {
-  left: 18%;
-  transform: translateY(-50%) rotate(-11deg);
-}
-
-.title-decor-right {
-  right: 18%;
-  transform: translateY(-50%) rotate(9deg);
-}
-
-.decor-shape {
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 8px rgba(181,124,255,.22));
-  animation: floatDecor 6s ease-in-out infinite;
-  transform-origin: center center;
-}
-
-.decor-triangle {
-  stroke: #c79cff;
-  fill: none;
-  opacity: 0.55;
-  animation-duration: 6.4s;
-  animation-delay: -1s;
-  transform: rotate(-12deg);
-  transform-origin: center;
-}
-
-.decor-circle {
-  stroke: #d9b8ff;
-  fill: none;
-  opacity: 0.45;
-  animation-duration: 5.4s;
-  animation-delay: -0.6s;
-  stroke-width: 1.8;
-}
-
-.decor-diamond {
-  stroke: #e6ccff;
-  fill: none;
-  opacity: 0.40;
-  animation-duration: 6.8s;
-  animation-delay: -1.4s;
-  transform: rotate(16deg);
-  transform-origin: center;
-}
-
-.decor-plus {
-  stroke: #b57cff;
-  stroke-width: 2.8;
-  opacity: 0.50;
-  animation-duration: 5.8s;
-  animation-delay: -2s;
-  transform: scale(.82);
-  transform-origin: center;
-}
-
-@keyframes floatDecor {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-3px) rotate(1.4deg);
-  }
 }
 
 @media (max-width: 768px) {
@@ -132,59 +43,29 @@ body {
     stroke-width: 2;
   }
 }
-.page-title h1 {
-  font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Segoe UI", sans-serif;
-  font-size: clamp(2.8rem, 6vw, 4rem);
-  font-weight: 900;
-  margin: 0 0 2px;
-  line-height: 1.12;
-  letter-spacing: 0.1em;
 
-  color: #ffffff;
-  background: linear-gradient(
-   135deg,
-   #ffffff 0%,
-   #f4ddff 20%,
-   #d9b8ff 55%,
-   #b57cff 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* ========================================
+   サイトロゴ画像
+======================================== */
 
-  text-shadow:
-    0 0 8px rgba(255,255,255,.9),
-    0 0 18px rgba(191,139,255,.25);
-
-  -webkit-text-stroke: 0.5px #b387de;
+.site-logo {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto;
 }
 
-.small-no{
-    font-size:0.72em;
-    display:inline-block;
-    transform:translateY(-0.05em);
-}
-
-.page-title .subtitle{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:14px;
-}
-
-.page-title .subtitle::before,
-.page-title .subtitle::after{
-    content:"";
-    width:70px;
-    height:2px;
-    border-radius:999px;
-    background:linear-gradient(
-        to right,
-        transparent,
-        #d9b8ff,
-        transparent
-    );
-    opacity:.55;
+.logo-description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 #search {
@@ -885,24 +766,6 @@ body.modal-open {
     padding-top:12px;
     padding-bottom:12px;
 
-  }
-  /* ---------- タイトル ---------- */
-
-  .page-title{
-    margin-bottom:20px;
-  }
-
-  .title-decor{
-    display:none;
-  }
-
-  .page-title h1{
-    font-size:2.7rem;
-  }
-
-  .page-title .subtitle::before,
-  .page-title .subtitle::after{
-    width:40px;
   }
 
   /* ---------- 検索 ---------- */
