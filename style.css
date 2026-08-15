@@ -25,6 +25,13 @@ body {
 }
 
 @media (max-width: 768px) {
+  .site-logo {
+    width: 94%;
+    max-width: none;
+    margin: 0 auto;
+   }
+  }
+
   .title-decor {
     width: 72px;
     height: 72px;
@@ -42,11 +49,15 @@ body {
   .decor-shape {
     stroke-width: 2;
   }
-}
 
 /* ========================================
    サイトロゴ画像
 ======================================== */
+
+.title-content picture {
+  display: block;
+  width: 100%;
+}
 
 .site-logo {
   display: block;
