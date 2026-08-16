@@ -40,20 +40,36 @@ function createStatusBadge(label, active) {
   return badge;
 }
 
-function openModal(songId) {
-  const song = songsById[songId];
+function openModal(singId) {
+  const song = songsById.get(singId);
+
   if (!song) return;
+
   renderModal(song);
+
+  const modalContent = document.querySelector('.modal-content');
+
+  if (modalContent) {
+    modalContent.scrollTop = 0;
+  }
+
   modalOverlay.classList.remove('hidden');
   modalOverlay.setAttribute('aria-hidden', 'false');
-  modalOverlay.scrollTop = 0;
+
   document.body.classList.add('modal-open');
 }
+
 
 function closeModal() {
   modalOverlay.classList.add('hidden');
   modalOverlay.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('modal-open');
+
+  const modalContent = document.querySelector('.modal-content');
+
+  if (modalContent) {
+    modalContent.scrollTop = 0;
+  }
 }
 
 function renderModal(song) {
@@ -129,7 +145,7 @@ async function loadSongs() {
 
     songs.forEach(song => {
 
-    songsById[song.song_id] = song;
+    songsById.set(song.sing_id, song);
 
     const card = document.createElement('div');
       card.className = 'song-card';
@@ -176,11 +192,11 @@ async function loadSongs() {
   
     <div class="card-actions">
      <button
-       type="button"
-       class="card-button detail-button"
-       data-song-id="${song.song_id}">
-       ⓘ詳細
-     </button>
+      type="button"
+      class="card-button detail-button"
+      data-sing-id="${song.sing_id}">
+      ⓘ詳細
+    </button>
     
      <a class="live-link"
         href="${song.youtube_link}"
@@ -191,7 +207,7 @@ async function loadSongs() {
     </div>
     `; 
     card.querySelector('.detail-button').addEventListener('click', () => {
-    openModal(song.song_id);
+    openModal(song.sing_id);
    });
 
       list.appendChild(card);
