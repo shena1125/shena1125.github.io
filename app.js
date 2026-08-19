@@ -49,14 +49,16 @@ function openModal(singId) {
 
   const modalContent = document.querySelector('.modal-content');
 
-  if (modalContent) {
-    modalContent.scrollTop = 0;
-  }
-
+  // 先にモーダルを表示
   modalOverlay.classList.remove('hidden');
   modalOverlay.setAttribute('aria-hidden', 'false');
 
   document.body.classList.add('modal-open');
+
+  // 表示後にスクロール位置を先頭へリセット
+  if (modalContent) {
+    modalContent.scrollTop = 0;
+  }
 }
 
 
