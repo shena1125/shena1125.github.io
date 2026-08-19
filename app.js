@@ -560,7 +560,7 @@ function applyDisplay(resetPage = false) {
   // ------------------------
 
   renderPagination(visibleCards);
-  showCurrentPage(visibleCards);
+  showCurrentPage(visibleCards, resetPage);
 
 }
     // 検索・フィルター・並び替えイベントを登録
