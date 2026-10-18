@@ -713,6 +713,90 @@ body.modal-open {
     margin:0 auto 18px;
 }
 
+/* ========================================
+   一覧ページへのリンク
+======================================== */
+
+.browse-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 650px;
+    margin: 0 auto 18px;
+}
+
+.browse-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    height: 52px;
+    padding: 0 12px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border: 1px solid #e7d9ff;
+    border-radius: 14px;
+
+    color: #7c3aed;
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+
+    box-shadow: 0 6px 18px rgba(181, 124, 255, .08);
+
+    transition:
+        background-color .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+/* PC用 */
+.browse-label-pc {
+    display: inline;
+}
+
+.browse-label-mobile {
+    display: none;
+}
+
+/* スマホ用 */
+@media (max-width: 768px) {
+    .browse-label-pc {
+        display: none;
+    }
+
+    .browse-label-mobile {
+        display: inline;
+    }
+}
+
+/* アーティスト一覧のホバー */
+a.browse-link:hover {
+    background: #f6f1ff;
+    border-color: #c4b5fd;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(181, 124, 255, .16);
+}
+
+/* 曲名一覧：準備中 */
+.browse-link-disabled {
+    color: #9ca3af;
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    cursor: default;
+}
+
+/* 準備中ラベル */
+.browse-link-disabled span {
+    font-size: .75rem;
+    font-weight: 500;
+    color: #9ca3af;
+}
+
 .search-wrapper::after{
     content:"";
 
@@ -767,16 +851,13 @@ body.modal-open {
    上部固定エリア
 ========================================== */
 
- .sticky-search-area{
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  .sticky-search-area {
+    position: static;
 
-    background:#fafafa;
+    background: #fafafa;
 
-    padding-top:12px;
-    padding-bottom:12px;
-
+    padding-top: 12px;
+    padding-bottom: 12px;
   }
 
   /* ---------- 検索 ---------- */

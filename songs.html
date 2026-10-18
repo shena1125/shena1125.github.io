@@ -1,0 +1,670 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>曲名一覧 | はじめのうた</title>
+  <meta
+    name="description"
+    content="轟はじめさんが歌枠で歌った曲名の一覧です。曲名やアーティスト名から検索できます。"
+  >
+
+  <link rel="icon" href="favicon-v1.png">
+  <link rel="stylesheet" href="./style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* ==============================
+       曲名一覧ページ
+    ============================== */
+
+    .song-index-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+
+    .song-index-page h2 {
+      margin: 0 0 8px;
+      color: #8b5cf6;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .song-index-description {
+      margin: 0 0 24px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* 検索・並び替え */
+
+    .song-index-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .song-index-search {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .song-index-search input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1px solid #dfd0ff;
+      border-radius: 12px;
+      background: #fff;
+      font: inherit;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .song-index-search input:focus {
+      border-color: #9b6bff;
+      box-shadow: 0 0 0 3px #9b6bff20;
+    }
+
+    .song-index-sort {
+      min-height: 44px;
+      max-width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #dfd0ff;
+      border-radius: 12px;
+      background: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* 五十音ジャンプ */
+
+    .song-index-jump {
+      margin-bottom: 20px;
+    }
+
+    .song-index-jump-label {
+      margin: 0 0 8px;
+      color: #7950d8;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .song-index-jump-menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .song-index-jump-menu button {
+      min-width: 42px;
+      min-height: 38px;
+      padding: 6px 12px;
+      border: 1px solid #dfd0ff;
+      border-radius: 10px;
+      background: #fff;
+      color: #7950d8;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color .2s, color .2s;
+    }
+
+    .song-index-jump-menu button:hover:not(:disabled) {
+      background: #8b5cf6;
+      color: #fff;
+    }
+
+    .song-index-jump-menu button:disabled {
+      background: #f5f3f8;
+      color: #bbb;
+      border-color: #eee;
+      cursor: not-allowed;
+    }
+
+    /* 件数表示 */
+
+    .song-index-count {
+      margin-bottom: 8px;
+      color: #7950d8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* 曲名一覧 */
+
+    .song-index-list {
+      border-top: 1px solid #eadfff;
+    }
+
+    .song-index-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 62px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eadfff;
+      background: #fff;
+      box-sizing: border-box;
+      transition: background-color .2s;
+    }
+
+    .song-index-row:hover {
+      background: #faf7ff;
+    }
+
+    .song-index-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .song-index-title {
+      display: inline-block;
+      color: #292333;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .song-index-title:hover {
+      color: #8b5cf6;
+      text-decoration: underline;
+    }
+
+    .song-index-artist {
+      margin-top: 4px;
+      color: #777;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .song-index-play-count {
+      flex-shrink: 0;
+      color: #7950d8;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* 五十音の見出し */
+
+    .song-index-heading {
+      margin: 24px 0 0;
+      padding: 10px 14px;
+      color: #7950d8;
+      background: #f3edff;
+      border-left: 4px solid #9b6bff;
+      font-size: 17px;
+      font-weight: 800;
+      scroll-margin-top: 20px;
+    }
+
+    .song-index-heading:first-child {
+      margin-top: 0;
+    }
+
+    /* 該当データなし */
+
+    .song-index-empty {
+      padding: 40px 12px;
+      color: #777;
+      text-align: center;
+    }
+
+    /* 下部リンク */
+
+    .song-index-back {
+      display: inline-block;
+      margin-top: 24px;
+      color: #8050e8;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .song-index-back:hover {
+      text-decoration: underline;
+    }
+
+    /* スマートフォン対応 */
+
+    @media (max-width: 560px) {
+      .song-index-page {
+        padding: 0 14px 30px;
+      }
+
+      .song-index-page h2 {
+        font-size: 21px;
+      }
+
+      .song-index-controls {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .song-index-sort {
+        width: 100%;
+      }
+
+      .song-index-jump-menu {
+        gap: 6px;
+      }
+
+      .song-index-jump-menu button {
+        min-width: 38px;
+        min-height: 36px;
+        padding: 6px 10px;
+      }
+
+      .song-index-row {
+        gap: 8px;
+        padding: 12px 10px;
+      }
+
+      .song-index-title {
+        font-size: 14px;
+      }
+
+      .song-index-artist {
+        font-size: 12px;
+      }
+
+      .song-index-play-count {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- サイトロゴ -->
+  <div class="page-title">
+    <a href="/" class="title-content">
+      <h1>
+        <picture>
+          <source
+            media="(max-width: 768px)"
+            srcset="logo-mobile.png"
+          >
+          <img
+            src="logo.png"
+            alt="はじめのうた"
+            class="site-logo"
+          >
+        </picture>
+      </h1>
+      <p class="logo-description">轟はじめ歌枠データベース</p>
+    </a>
+  </div>
+
+  <main class="song-index-page">
+    <h2>曲名一覧</h2>
+
+    <p class="song-index-description">
+      轟はじめさんが歌った曲を五十音順で掲載しています。
+      曲名やアーティスト名から検索できます。
+    </p>
+
+    <!-- 検索・並び替え -->
+    <div class="song-index-controls">
+      <div class="song-index-search">
+        <input
+          type="search"
+          id="song-index-search"
+          placeholder="曲名・アーティスト名で検索"
+          autocomplete="off"
+          aria-label="曲名・アーティスト名で検索"
+        >
+      </div>
+
+      <select
+        id="song-index-sort"
+        class="song-index-sort"
+        aria-label="曲名一覧の並び替え"
+      >
+        <option value="reading-asc">五十音順</option>
+        <option value="count-asc">歌唱回数が少ない順</option>
+        <option value="count-desc">歌唱回数が多い順</option>
+      </select>
+    </div>
+
+    <!-- 五十音ジャンプ -->
+    <section class="song-index-jump">
+      <p class="song-index-jump-label">五十音から探す</p>
+      <nav
+        id="song-index-jump-menu"
+        class="song-index-jump-menu"
+        aria-label="五十音ジャンプ"
+      ></nav>
+    </section>
+
+    <div
+      id="song-index-count"
+      class="song-index-count"
+      aria-live="polite"
+    >曲を読み込み中...</div>
+
+    <div id="song-index-list" class="song-index-list"></div>
+
+    <a href="/" class="song-index-back">
+      ← トップページへ戻る
+    </a>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const GROUPS = [
+        { name: "あ行", chars: "あいうえおぁぃぅぇぉ" },
+        { name: "か行", chars: "かきくけこがぎぐげご" },
+        { name: "さ行", chars: "さしすせそざじずぜぞ" },
+        { name: "た行", chars: "たちつてとだぢづでどっ" },
+        { name: "な行", chars: "なにぬねの" },
+        { name: "は行", chars: "はひふへほばびぶべぼぱぴぷぺぽ" },
+        { name: "ま行", chars: "まみむめも" },
+        { name: "や行", chars: "やゆよゃゅょ" },
+        { name: "ら行", chars: "らりるれろ" },
+        { name: "わ行", chars: "わをん" }
+      ];
+
+      const searchInput =
+        document.getElementById("song-index-search");
+      const sortSelect =
+        document.getElementById("song-index-sort");
+      const listElement =
+        document.getElementById("song-index-list");
+      const countElement =
+        document.getElementById("song-index-count");
+      const jumpMenu =
+        document.getElementById("song-index-jump-menu");
+
+      let allSongs = [];
+      let currentSongs = [];
+
+      function normalize(value) {
+        return String(value || "")
+          .normalize("NFKC")
+          .toLowerCase()
+          .trim();
+      }
+
+      function getGroup(reading) {
+        const firstChar = normalize(reading).charAt(0);
+
+        for (const group of GROUPS) {
+          if (group.chars.includes(firstChar)) {
+            return group.name;
+          }
+        }
+
+        return "その他";
+      }
+
+      function compareReading(a, b) {
+        const readingA = a.reading || a.title;
+        const readingB = b.reading || b.title;
+
+        return readingA.localeCompare(readingB, "ja", {
+          sensitivity: "base"
+        }) || a.title.localeCompare(b.title, "ja");
+      }
+
+      function createSongData(rawSongs) {
+        const songMap = new Map();
+
+        rawSongs.forEach(song => {
+          const title = String(song.song_title || "").trim();
+
+          if (!title) return;
+
+          // song_idを優先して、同じ曲を1件にまとめる
+          const key = song.song_id
+            ? `id:${song.song_id}`
+            : `title:${normalize(title)}`;
+
+          if (!songMap.has(key)) {
+            songMap.set(key, {
+              key,
+              title,
+              reading: String(
+                song.song_title_reading || title
+              ).trim(),
+              artists: new Set(),
+              performanceCount: 0
+            });
+          }
+
+          const entry = songMap.get(key);
+
+          entry.performanceCount += 1;
+
+          if (song.artist && String(song.artist).trim()) {
+            entry.artists.add(String(song.artist).trim());
+          }
+
+          // 読み仮名が登録されている場合はそちらを使用
+          if (song.song_title_reading) {
+            entry.reading = String(song.song_title_reading).trim();
+          }
+        });
+
+        return Array.from(songMap.values()).map(song => ({
+          ...song,
+          artists: Array.from(song.artists).sort((a, b) =>
+            a.localeCompare(b, "ja")
+          ),
+          group: getGroup(song.reading)
+        }));
+      }
+
+      function createJumpMenu() {
+        jumpMenu.innerHTML = "";
+
+        [...GROUPS.map(group => group.name), "その他"].forEach(name => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = name.replace("行", "");
+          button.setAttribute("aria-label", `${name}へ移動`);
+
+          button.addEventListener("click", () => {
+            const heading = document.getElementById(
+              `song-group-${name}`
+            );
+
+            if (heading) {
+              heading.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
+            }
+          });
+
+          jumpMenu.appendChild(button);
+        });
+      }
+
+      function filterAndSort() {
+        const keyword = normalize(searchInput.value);
+        const sortOrder = sortSelect.value;
+
+        currentSongs = allSongs.filter(song => {
+          if (!keyword) return true;
+
+          const searchableText = normalize([
+            song.title,
+            song.reading,
+            ...song.artists
+          ].join(" "));
+
+          return searchableText.includes(keyword);
+        });
+
+        currentSongs.sort((a, b) => {
+          if (sortOrder === "count-asc") {
+            return a.performanceCount - b.performanceCount
+              || compareReading(a, b);
+          }
+
+          if (sortOrder === "count-desc") {
+            return b.performanceCount - a.performanceCount
+              || compareReading(a, b);
+          }
+
+          return compareReading(a, b);
+        });
+
+        renderSongs();
+      }
+
+      function renderSongs() {
+        listElement.innerHTML = "";
+
+        countElement.textContent =
+          `🎵 曲数：${currentSongs.length}曲`;
+
+        if (currentSongs.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "song-index-empty";
+          empty.textContent = "該当する曲が見つかりませんでした。";
+          listElement.appendChild(empty);
+          updateJumpButtons();
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        // グループごとに曲をまとめる
+        const groupedSongs = new Map();
+
+        currentSongs.forEach(song => {
+          if (!groupedSongs.has(song.group)) {
+            groupedSongs.set(song.group, []);
+          }
+          groupedSongs.get(song.group).push(song);
+        });
+
+        // 五十音順の各行を表示し、「その他」は必ず最後に表示
+        const orderedGroups = [
+          ...GROUPS.map(group => group.name),
+          "その他"
+        ];
+
+        orderedGroups.forEach(groupName => {
+          const songs = groupedSongs.get(groupName);
+
+          // 該当する曲がないグループは表示しない
+          if (!songs || songs.length === 0) return;
+
+          const heading = document.createElement("h3");
+          heading.className = "song-index-heading";
+          heading.id = `song-group-${groupName}`;
+          heading.textContent = groupName;
+          fragment.appendChild(heading);
+
+          songs.forEach(song => {
+            const row = document.createElement("div");
+            row.className = "song-index-row";
+
+            const main = document.createElement("div");
+            main.className = "song-index-main";
+
+            const link = document.createElement("a");
+            link.className = "song-index-title";
+            link.textContent = song.title;
+
+            // 現在のトップページ側のURLパラメータ処理を利用
+            link.href = `/?artist=${encodeURIComponent(song.title)}`;
+
+            const artist = document.createElement("div");
+            artist.className = "song-index-artist";
+            artist.textContent = song.artists.length
+              ? `🎤 ${song.artists.join(" / ")}`
+              : "🎤 アーティスト情報なし";
+
+            const playCount = document.createElement("div");
+            playCount.className = "song-index-play-count";
+            playCount.textContent =
+              `歌唱回数：${song.performanceCount}回`;
+
+            main.appendChild(link);
+            main.appendChild(artist);
+            row.appendChild(main);
+            row.appendChild(playCount);
+            fragment.appendChild(row);
+          });
+        });
+
+        listElement.appendChild(fragment);
+        updateJumpButtons();
+      }
+
+      function updateJumpButtons() {
+        const availableGroups = new Set(
+          currentSongs.map(song => song.group)
+        );
+
+        Array.from(jumpMenu.querySelectorAll("button"))
+          .forEach((button, index) => {
+            const groupName = [
+              ...GROUPS.map(group => group.name),
+              "その他"
+            ][index];
+
+            button.disabled = !availableGroups.has(groupName);
+          });
+      }
+
+      async function init() {
+        createJumpMenu();
+
+        try {
+          const response = await fetch("./songs.json");
+
+          if (!response.ok) {
+            throw new Error("songs.jsonを読み込めませんでした。");
+          }
+
+          const rawSongs = await response.json();
+
+          if (!Array.isArray(rawSongs)) {
+            throw new Error("歌唱データの形式が正しくありません。");
+          }
+
+          allSongs = createSongData(rawSongs);
+          filterAndSort();
+        } catch (error) {
+          console.error(error);
+          countElement.textContent = "曲データを読み込めませんでした。";
+
+          listElement.innerHTML = "";
+          const message = document.createElement("div");
+          message.className = "song-index-empty";
+          message.textContent =
+            "データを読み込めませんでした。時間をおいて再読み込みしてください。";
+          listElement.appendChild(message);
+        }
+      }
+
+      searchInput.addEventListener("input", filterAndSort);
+      sortSelect.addEventListener("change", filterAndSort);
+
+      init();
+    })();
+  </script>
+</body>
+</html>

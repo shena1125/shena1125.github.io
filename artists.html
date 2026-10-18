@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>アーティスト一覧 | はじめのうた</title>
+
+  <meta
+    name="description"
+    content="轟はじめさんが歌枠で歌ったアーティストの一覧です。"
+  >
+
+  <link rel="icon" href="favicon-v1.png">
+  <link rel="stylesheet" href="./style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* ==============================
+       アーティスト一覧ページ
+    ============================== */
+
+    .artist-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+
+    .artist-page h2 {
+      margin: 0 0 8px;
+      color: #8b5cf6;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .artist-description {
+      margin: 0 0 24px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+
+    /* ==============================
+       検索・並び替え
+    ============================== */
+
+    .artist-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .artist-search {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .artist-search input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1px solid #dfd0ff;
+      border-radius: 12px;
+      background: #fff;
+      font: inherit;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .artist-search input:focus {
+      border-color: #9b6bff;
+      box-shadow: 0 0 0 3px #9b6bff20;
+    }
+
+    .artist-sort {
+      min-height: 44px;
+      max-width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #dfd0ff;
+      border-radius: 12px;
+      background: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+
+    /* ==============================
+       五十音ジャンプメニュー
+    ============================== */
+
+    .artist-jump-section {
+      margin: 0 0 20px;
+    }
+
+    .artist-jump-label {
+      margin: 0 0 8px;
+      color: #7950d8;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .artist-jump-menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .artist-jump-menu button {
+      min-width: 42px;
+      min-height: 38px;
+      padding: 6px 12px;
+      border: 1px solid #dfd0ff;
+      border-radius: 10px;
+      background: #fff;
+      color: #7950d8;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        background-color 0.2s,
+        color 0.2s;
+    }
+
+    .artist-jump-menu button:hover:not(:disabled) {
+      background: #8b5cf6;
+      color: #fff;
+    }
+
+    .artist-jump-menu button:focus-visible {
+      outline: 2px solid #8b5cf6;
+      outline-offset: 2px;
+    }
+
+    .artist-jump-menu button:disabled {
+      background: #f5f3f8;
+      color: #bbb;
+      border-color: #eee;
+      cursor: not-allowed;
+    }
+
+
+    /* ==============================
+       検索結果の件数
+    ============================== */
+
+    .artist-result-count {
+      margin-bottom: 8px;
+      color: #7950d8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+
+    /* ==============================
+       アーティスト一覧
+    ============================== */
+
+    .artist-list {
+      border-top: 1px solid #eadfff;
+    }
+
+    .artist-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 54px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eadfff;
+      background: #fff;
+      box-sizing: border-box;
+      transition: background-color 0.2s;
+    }
+
+    .artist-row:hover {
+      background: #faf7ff;
+    }
+
+    .artist-name {
+      min-width: 0;
+      color: #292333;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .artist-name:hover {
+      color: #8b5cf6;
+      text-decoration: underline;
+    }
+
+    .artist-song-count {
+      flex-shrink: 0;
+      color: #7950d8;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+
+    /* ==============================
+       五十音の行見出し
+    ============================== */
+
+    .artist-group-heading {
+      margin: 24px 0 0;
+      padding: 10px 14px;
+      color: #7950d8;
+      background: #f3edff;
+      border-left: 4px solid #9b6bff;
+      font-size: 17px;
+      font-weight: 800;
+      scroll-margin-top: 20px;
+    }
+
+    .artist-group-heading:first-child {
+      margin-top: 0;
+    }
+
+
+    /* ==============================
+       該当するアーティストがない場合
+    ============================== */
+
+    .artist-empty {
+      padding: 40px 12px;
+      color: #777;
+      text-align: center;
+    }
+
+
+    /* ==============================
+       曲一覧に戻るリンク
+    ============================== */
+
+    .artist-back {
+      display: inline-block;
+      margin-top: 24px;
+      color: #8050e8;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .artist-back:hover {
+      text-decoration: underline;
+    }
+
+
+    /* ==============================
+       スマートフォン対応
+    ============================== */
+
+    @media (max-width: 560px) {
+
+      .artist-page {
+        padding: 0 14px 30px;
+      }
+
+      .artist-page h2 {
+        font-size: 21px;
+      }
+
+      .artist-controls {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .artist-sort {
+        width: 100%;
+      }
+
+      .artist-jump-menu {
+        gap: 6px;
+      }
+
+      .artist-jump-menu button {
+        min-width: 38px;
+        min-height: 36px;
+        padding: 6px 10px;
+      }
+
+      .artist-row {
+        padding: 12px 10px;
+      }
+
+      .artist-name {
+        font-size: 14px;
+      }
+
+      .artist-song-count {
+        font-size: 13px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ==============================
+       サイトロゴ
+  ============================== -->
+
+  <div class="page-title">
+    <a href="/" class="title-content">
+
+      <h1>
+        <picture>
+          <source
+            media="(max-width: 768px)"
+            srcset="logo-mobile.png"
+          >
+
+          <img
+            src="logo.png"
+            alt="はじめのうた"
+            class="site-logo"
+          >
+        </picture>
+      </h1>
+
+      <p class="logo-description">
+        轟はじめ歌枠データベース
+      </p>
+
+    </a>
+  </div>
+
+
+  <!-- ==============================
+       アーティスト一覧
+  ============================== -->
+
+  <main class="artist-page">
+
+    <h2>アーティスト一覧</h2>
+      <p class="artist-description">
+       轟はじめさんが歌ったアーティスト名を五十音順で掲載しています。
+      </p>
+
+    <!-- 検索・並び替え -->
+
+    <div class="artist-controls">
+
+      <div class="artist-search">
+
+        <input
+          type="text"
+          id="artist-search"
+          placeholder="アーティスト名で検索"
+          autocomplete="off"
+        >
+
+      </div>
+
+      <select
+        id="artist-sort"
+        class="artist-sort"
+        aria-label="アーティストの並び替え"
+      >
+
+        <option value="reading-asc">
+          読み仮名順（昇順）
+        </option>
+
+        <option value="reading-desc">
+          読み仮名順（降順）
+        </option>
+
+        <option value="count-asc">
+          曲数が少ない順
+        </option>
+
+        <option value="count-desc">
+          曲数が多い順
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- 五十音ジャンプメニュー -->
+
+    <div class="artist-jump-section">
+
+      <p class="artist-jump-label">
+        行から探す
+      </p>
+
+      <div
+        id="artist-jump-menu"
+        class="artist-jump-menu"
+        aria-label="五十音の行へ移動"
+      >
+
+        <button type="button" data-group="あ行">あ</button>
+
+        <button type="button" data-group="か行">か</button>
+
+        <button type="button" data-group="さ行">さ</button>
+
+        <button type="button" data-group="た行">た</button>
+
+        <button type="button" data-group="な行">な</button>
+
+        <button type="button" data-group="は行">は</button>
+
+        <button type="button" data-group="ま行">ま</button>
+
+        <button type="button" data-group="や行">や</button>
+
+        <button type="button" data-group="ら行">ら</button>
+
+        <button type="button" data-group="わ行">わ</button>
+
+        <button type="button" data-group="その他">他</button>
+
+      </div>
+
+    </div>
+
+
+    <!-- 検索結果の件数 -->
+
+    <div
+      id="artist-result-count"
+      class="artist-result-count"
+      aria-live="polite"
+    >
+      読み込み中...
+    </div>
+
+
+    <!-- アーティスト一覧の表示先 -->
+
+    <div
+      id="artist-list"
+      class="artist-list"
+      aria-live="polite"
+    ></div>
+
+
+    <!-- 曲一覧に戻る -->
+
+    <a href="/" class="artist-back">
+      ← 曲一覧に戻る
+    </a>
+
+  </main>
+
+
+  <!-- ==============================
+       JavaScript
+  ============================== -->
+
+  <script>
+
+    /* ==============================
+       DOM要素
+    ============================== */
+
+    const artistSearch = document.getElementById("artist-search");
+
+    const artistSort = document.getElementById("artist-sort");
+
+    const artistList = document.getElementById("artist-list");
+
+    const artistResultCount = document.getElementById(
+      "artist-result-count"
+    );
+
+    const artistJumpMenu = document.getElementById(
+      "artist-jump-menu"
+    );
+
+
+    /* ==============================
+       アーティストデータ
+    ============================== */
+
+    let artists = [];
+
+
+    /* ==============================
+       五十音の行を定義
+    ============================== */
+
+    const groupNames = [
+
+      {
+        name: "あ行",
+        chars: "あいうえお"
+      },
+
+      {
+        name: "か行",
+        chars: "かきくけこがぎぐげご"
+      },
+
+      {
+        name: "さ行",
+        chars: "さしすせそざじずぜぞ"
+      },
+
+      {
+        name: "た行",
+        chars: "たちつてとだぢづでど"
+      },
+
+      {
+        name: "な行",
+        chars: "なにぬねの"
+      },
+
+      {
+        name: "は行",
+        chars: "はひふへほばびぶべぼぱぴぷぺぽ"
+      },
+
+      {
+        name: "ま行",
+        chars: "まみむめも"
+      },
+
+      {
+        name: "や行",
+        chars: "やゆよ"
+      },
+
+      {
+        name: "ら行",
+        chars: "らりるれろ"
+      },
+
+      {
+        name: "わ行",
+        chars: "わをん"
+      }
+
+    ];
+
+
+    /* ==============================
+       読み仮名から行を判定
+    ============================== */
+
+    function getArtistGroup(reading) {
+
+      const firstChar = reading.trim().charAt(0);
+
+      for (const group of groupNames) {
+
+        if (group.chars.includes(firstChar)) {
+          return group.name;
+        }
+
+      }
+
+      return "その他";
+    }
+
+
+    /* ==============================
+       アーティスト情報を読み込む
+    ============================== */
+
+    async function loadArtists() {
+
+      try {
+
+        const response = await fetch("./songs.json");
+
+        if (!response.ok) {
+
+          throw new Error(
+            "歌唱データを読み込めませんでした。"
+          );
+
+        }
+
+        const songs = await response.json();
+
+        // アーティストごとに情報を集計
+        const artistMap = new Map();
+
+
+        songs.forEach(song => {
+
+          const artist = song.artist?.trim();
+
+          const reading = song.artist_reading?.trim();
+
+          // アーティスト名がないデータは除外
+          if (!artist) return;
+
+
+          // 初めて登場したアーティストを登録
+          if (!artistMap.has(artist)) {
+
+            artistMap.set(artist, {
+
+              name: artist,
+
+              reading: reading || artist,
+
+              songIds: new Set()
+
+            });
+
+          }
+
+
+          const artistData = artistMap.get(artist);
+
+
+          // 登録されている読み仮名を使用
+          if (reading) {
+
+            artistData.reading = reading;
+
+          }
+
+
+          // 同じ曲を複数回歌っていても1曲として集計
+          if (song.song_id) {
+
+            artistData.songIds.add(song.song_id);
+
+          } else {
+
+            // song_idがない場合は曲名を使用
+            artistData.songIds.add(
+              song.song_title || song.sing_id
+            );
+
+          }
+
+        });
+
+
+        // 表示用の配列に変換
+        artists = Array.from(artistMap.values()).map(artist => ({
+
+          name: artist.name,
+
+          reading: artist.reading,
+
+          count: artist.songIds.size
+
+        }));
+
+
+        // 一覧を表示
+        renderArtists();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        artistResultCount.textContent = "";
+
+        artistList.replaceChildren();
+
+
+        const message = document.createElement("p");
+
+        message.className = "artist-empty";
+
+        message.textContent =
+          "アーティスト一覧を読み込めませんでした。";
+
+
+        artistList.appendChild(message);
+
+        // 読み込み失敗時はジャンプボタンを無効化
+        updateArtistJumpMenu();
+
+      }
+
+    }
+
+
+    /* ==============================
+       アーティスト一覧を描画
+    ============================== */
+
+    function renderArtists() {
+
+      // 検索キーワード
+      const keyword = artistSearch.value
+        .trim()
+        .toLocaleLowerCase();
+
+
+      // 並び替え方法
+      const sortOrder = artistSort.value;
+
+
+      // アーティスト名・読み仮名で検索
+      const filteredArtists = artists.filter(artist => {
+
+        return (
+
+          artist.name.toLocaleLowerCase().includes(keyword) ||
+
+          artist.reading.toLocaleLowerCase().includes(keyword)
+
+        );
+
+      });
+
+
+      // 並び替え
+      filteredArtists.sort((a, b) => {
+
+        // 曲数が少ない順・多い順
+        if (
+
+          sortOrder === "count-asc" ||
+
+          sortOrder === "count-desc"
+
+        ) {
+
+          const difference = a.count - b.count;
+
+
+          if (difference !== 0) {
+
+            return sortOrder === "count-asc"
+
+              ? difference
+
+              : -difference;
+
+          }
+
+        }
+
+
+        // 読み仮名順（降順）
+        if (sortOrder === "reading-desc") {
+
+          return b.reading.localeCompare(
+            a.reading,
+            "ja"
+          );
+
+        }
+
+
+        // 読み仮名順（昇順）
+        return a.reading.localeCompare(
+          b.reading,
+          "ja"
+        );
+
+      });
+
+
+      // 検索結果件数
+      artistResultCount.textContent =
+        `アーティスト：${filteredArtists.length}組`;
+
+
+      // 一覧をクリア
+      artistList.replaceChildren();
+
+
+      // 該当するアーティストがいない場合
+      if (filteredArtists.length === 0) {
+
+        const message = document.createElement("p");
+
+        message.className = "artist-empty";
+
+        message.textContent =
+          "該当するアーティストが見つかりません。";
+
+
+        artistList.appendChild(message);
+
+
+        // ジャンプボタンを更新
+        updateArtistJumpMenu();
+
+        return;
+
+      }
+
+
+      // 現在表示している行
+      let currentGroup = "";
+
+
+      // アーティスト一覧を生成
+      filteredArtists.forEach(artist => {
+
+        // 読み仮名から行を判定
+        const group = getArtistGroup(artist.reading);
+
+
+        // 行が切り替わったら見出しを追加
+        if (group !== currentGroup) {
+
+          const heading = document.createElement("h3");
+
+          heading.className = "artist-group-heading";
+
+          heading.textContent = group;
+
+
+          // 同じ行が複数回登場する場合も、
+          // 最初の見出しをジャンプ先にする
+          if (
+
+            !artistList.querySelector(
+
+              `[data-group-heading="${group}"]`
+
+            )
+
+          ) {
+
+            heading.dataset.groupHeading = group;
+
+          }
+
+
+          artistList.appendChild(heading);
+
+          currentGroup = group;
+
+        }
+
+
+        // アーティストの行
+        const row = document.createElement("div");
+
+        row.className = "artist-row";
+
+
+        // アーティスト名
+        const link = document.createElement("a");
+
+        link.className = "artist-name";
+
+        link.textContent = artist.name;
+
+
+        // 次のステップで既存の曲一覧との連携を実装する
+        link.href =
+          `/?artist=${encodeURIComponent(artist.name)}`;
+
+
+        // 曲数
+        const count = document.createElement("span");
+
+        count.className = "artist-song-count";
+
+        count.textContent = `${artist.count}曲`;
+
+
+        // 行に追加
+        row.append(link, count);
+
+        artistList.appendChild(row);
+
+      });
+
+
+      // ジャンプメニューの状態を更新
+      updateArtistJumpMenu();
+
+    }
+
+
+    /* ==============================
+       ジャンプメニューの状態を更新
+    ============================== */
+
+    function updateArtistJumpMenu() {
+
+      // 現在表示されている見出しを取得
+      const headings = new Set(
+
+        Array.from(
+
+          artistList.querySelectorAll(
+            "[data-group-heading]"
+          )
+
+        ).map(heading => {
+
+          return heading.dataset.groupHeading;
+
+        })
+
+      );
+
+
+      // 該当する行がないボタンを無効化
+      artistJumpMenu
+        .querySelectorAll("button[data-group]")
+        .forEach(button => {
+
+          button.disabled = !headings.has(
+            button.dataset.group
+          );
+
+        });
+
+    }
+
+
+    /* ==============================
+       ジャンプメニューのクリック処理
+    ============================== */
+
+    artistJumpMenu.addEventListener("click", event => {
+
+      // クリックされたボタンを取得
+      const button = event.target.closest(
+        "button[data-group]"
+      );
+
+
+      // ボタン以外、または無効なボタンなら終了
+      if (!button || button.disabled) return;
+
+
+      // 移動先の行
+      const group = button.dataset.group;
+
+
+      // 該当する見出しを探す
+      const heading = Array.from(
+
+        artistList.querySelectorAll(
+          "[data-group-heading]"
+        )
+
+      ).find(element => {
+
+        return element.dataset.groupHeading === group;
+
+      });
+
+
+      // 見出しがなければ終了
+      if (!heading) return;
+
+
+      // スムーズにスクロール
+      heading.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+      });
+
+    });
+
+
+    /* ==============================
+       検索・並び替えのイベント
+    ============================== */
+
+    artistSearch.addEventListener(
+      "input",
+      renderArtists
+    );
+
+
+    artistSort.addEventListener(
+      "change",
+      renderArtists
+    );
+
+
+    /* ==============================
+       初期表示
+    ============================== */
+
+    loadArtists();
+
+  </script>
+
+</body>
+</html>

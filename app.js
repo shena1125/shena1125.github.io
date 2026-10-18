@@ -229,6 +229,14 @@ async function loadSongs() {
     const CARDS_PER_PAGE = 12;
     let currentPage = 1;
 
+    // URLに指定されたアーティスト名を検索欄に反映
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedArtist = urlParams.get('artist');
+
+    if (searchInput && selectedArtist) {
+      searchInput.value = selectedArtist;
+    }
+
     function matchesSearch(card, keyword) {
       if (!keyword) return true;
 
