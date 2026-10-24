@@ -863,7 +863,10 @@ a.browse-link:hover {
   /* ---------- 検索 ---------- */
 
   .search-wrapper{
-    margin-bottom:16px;
+    margin-bottom:8px;
+  }
+  .browse-links {
+    margin-bottom: 8px;
   }
 
   #search{

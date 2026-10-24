@@ -363,6 +363,15 @@
     <a href="/" class="song-index-back">
       ← トップページへ戻る
     </a>
+  <button
+   id="back-to-top"
+   class="back-to-top"
+   type="button"
+   aria-label="ページ上部へ戻る"
+   >
+  ↑
+</button>
+
   </main>
 
   <script>
@@ -665,6 +674,27 @@
 
       init();
     })();
+
+// 上に戻るボタン
+const backToTopButton = document.getElementById("back-to-top");
+
+// スクロール位置に応じてボタンを表示・非表示
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopButton.classList.add("show");
+  } else {
+    backToTopButton.classList.remove("show");
+  }
+});
+
+// クリックするとページ上部へ戻る
+backToTopButton.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+
   </script>
 </body>
 </html>
